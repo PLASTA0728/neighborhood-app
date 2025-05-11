@@ -1,0 +1,24 @@
+{
+  "pages": {
+    "/dashboard/(overview)/page": [
+      "static/chunks/_aacc53._.js",
+      "static/chunks/app_opengraph-image_png_mjs_4edca1._.js",
+      "static/chunks/[root of the server]__3314af._.css",
+      "static/chunks/app_layout_tsx_83fc40._.js",
+      "static/chunks/app_layout_tsx_495e10._.js",
+      "static/chunks/_118306._.js",
+      "static/chunks/app_dashboard_layout_tsx_2397d8._.js",
+      "static/chunks/a7abb_next_dist_766dee._.js",
+      "static/chunks/app_dashboard_(overview)_page_tsx_31276a._.js",
+      "static/chunks/app_dashboard_(overview)_page_tsx_b479db._.js",
+      "static/chunks/a7abb_next_dist_compiled_react-dom_99acc9._.js",
+      "static/chunks/a7abb_next_dist_compiled_c9fc5a._.js",
+      "static/chunks/a7abb_next_dist_client_91ac0f._.js",
+      "static/chunks/a7abb_next_dist_98d156._.js",
+      "static/chunks/61dca_@swc_helpers_cjs_e27e0a._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_d0afae._.js",
+      "static/chunks/_e69f0d._.js",
+      "static/chunks/_925e0d._.js"
+    ]
+  }
+}
