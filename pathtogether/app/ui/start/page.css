@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    
+}
+
+.app{
+    height: 100vh;
+    filter: contrast(750%) brightness(100%);
+    background: linear-gradient(
+        to bottom, 
+        rgba(22, 119, 116, 0.7), 
+        /* rgba(121, 26, 104, 0.7) */
+        rgba(93, 28, 102, 0.5)
+    ),
+    radial-gradient(
+        at var(--mouse-x) var(--mouse-y),
+        rgba(255, 255, 255, 0.5),
+        rgba(0, 0, 0, 0.3)
+    ),
+	url("data:image/svg+xml,%3Csvg viewBox='0 0 243 243' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='5.18' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    z-index: 0;
+    opacity: 0.3;
+}
+
+.black-filter {
+    height: 100vh;
+    background-color: black;
+    z-index: 1;
+}
+
+iframe {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    border: none;
+    z-index: 2;
+    opacity: 0.2;
+}
