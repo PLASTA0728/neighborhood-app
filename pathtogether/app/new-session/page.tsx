@@ -2,7 +2,7 @@
 // import clsx from "clsx";
 // import { Fragment } from 'react'
 
-export default function LoginPage() {
+export default function newSession() {
   return (
     <main className="w-full h-screen">
         <div className="w-2/5">
