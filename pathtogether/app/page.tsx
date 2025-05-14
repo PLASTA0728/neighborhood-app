@@ -33,13 +33,8 @@ function App() {
 
 return (
   <div className="static">
-    <div className="black-filter" id="black-filter">
-      <div className="app" id="app" ref={appRef} data-scroll-container>
-        {/* <div className="blink justify-center flex align center">
-          Homepage
-        </div> */}
-      </div>
-    </div>
+    <div className="absolute -z-10 w-full h-full" id="app" ref={appRef} data-scroll-container></div>
+    <div className="absolute bg-black z-0 w-full h-full opacity-50"></div>
     <div className={`${jost.className} z-10 absolute top-1/2 left-1/7`}>
       <div className="text-6xl font-normal">PathTogether</div>
       <div className="text-3xl font-extralight">one map, every destination</div>
