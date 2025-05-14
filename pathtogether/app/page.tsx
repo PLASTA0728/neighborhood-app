@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect, useRef } from "react";
-import { Button }from "@/app/ui/button";
+// import { Button }from "@/app/ui/button";
 import  "@/app/ui/start/page.css";
 import { jost } from "./ui/fonts";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 
 function App() {
   const appRef = useRef(null);
-  const toRef = useRef(null);
+  // const toRef = useRef(null);
 
   useEffect(() => {
     const moveGradient = (event) => {
@@ -46,7 +46,7 @@ return (
       <svg xmlns="http://www.w3.org/2000/svg" className="z-40 relative right-10 top-4 fill-none stroke-white stroke-2 size-6"><path stroke-linecap="round" stroke-linejoin="round" d="m7.49 12-3.75 3.75m0 0 3.75 3.75m-3.75-3.75h16.5V4.499" /></svg>
       </Link>
     </div>
-    <Link href={"/new-session"} className="relative left-4 top-2">don't have one? generate now!</Link>
+    <Link href={"/new-session"} className="relative left-4 top-2">don&apos;t have one? generate now!</Link>
     </div>
   {/* <iframe src="https://snazzymaps.com/embed/708506" className="absolute w-full h-full z-10 opacity-20"></iframe> */}
 </div>
