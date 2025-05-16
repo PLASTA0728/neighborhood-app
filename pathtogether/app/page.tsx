@@ -43,7 +43,7 @@ return (
     <div className="flex">
       <input className="z-20 placeholder:text-gray-500 bg-black px-4 py-4 w-75 relative left-0 rounded-md" placeholder="enter your session code" type="string" name="enter-session-code" />
       <Link href={"/edit-session"}>
-      <svg xmlns="http://www.w3.org/2000/svg" className="z-40 relative right-10 top-4 fill-none stroke-white stroke-2 size-6"><path strokeLinecap="round" stroke-linejoin="round" d="m7.49 12-3.75 3.75m0 0 3.75 3.75m-3.75-3.75h16.5V4.499" /></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" className="z-40 relative right-10 top-4 fill-none stroke-white stroke-2 size-6"><path strokeLinecap="round" strokeLinejoin="round" d="m7.49 12-3.75 3.75m0 0 3.75 3.75m-3.75-3.75h16.5V4.499" /></svg>
       </Link>
     </div>
     <Link href={"/new-session"} className="relative left-4 top-2">don&apos;t have one? generate now!</Link>

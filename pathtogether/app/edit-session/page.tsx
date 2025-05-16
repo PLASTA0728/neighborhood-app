@@ -12,7 +12,7 @@ export default function editSession() {
     return (
         <main className="w-full h-screen flex">
             <div className="w-2/5 pt-4 pl-4 pr-4">
-                <div className='text-bold text-2xl text-center mb-4'>take me on the map!</div>
+                <div className='text-2xl text-center mb-4'>take me on the map!</div>
                 <div className="grid grid-cols-2 gap-4 pb-4">
                     <input className="relative px-4 py-4 rounded-md bg-white text-black" placeholder="my name"></input>
                     <input className="relative px-4 py-4 rounded-md bg-white text-black" placeholder="my age"></input>
