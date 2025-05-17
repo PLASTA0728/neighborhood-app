@@ -5,9 +5,21 @@ import { useEffect, useRef } from "react";
 import  "@/app/ui/start/page.css";
 import { jost } from "./ui/fonts";
 import Link from "next/link";
-// import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 function App() {
+  const [sessionCode, setSessionCode] = useState("");
+  const router = useRouter();
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      // router.push(`/edit-session/${sessionCode}`);
+      router.push("/edit-session");
+    }
+  };
+
   const appRef = useRef(null);
   // const toRef = useRef(null);
 
@@ -41,7 +53,11 @@ return (
     </div>
     <div className="absolute top-1/2 left-3/5">
     <div className="flex">
-      <input className="z-20 placeholder:text-gray-500 bg-black px-4 py-4 w-75 relative left-0 rounded-md" placeholder="enter your session code" type="string" name="enter-session-code" />
+      <input className="z-20 placeholder:text-gray-500 bg-black px-4 py-4 w-75 relative left-0 rounded-md" placeholder="enter your session code" type="string" name="enter-session-code" 
+        value={sessionCode}
+        onChange={(e) => setSessionCode(e.target.value)}
+        onKeyDown={handleKeyDown} 
+      />
       <Link href={"/edit-session"}>
       <svg xmlns="http://www.w3.org/2000/svg" className="z-40 relative right-10 top-4 fill-none stroke-white stroke-2 size-6"><path strokeLinecap="round" strokeLinejoin="round" d="m7.49 12-3.75 3.75m0 0 3.75 3.75m-3.75-3.75h16.5V4.499" /></svg>
       </Link>
