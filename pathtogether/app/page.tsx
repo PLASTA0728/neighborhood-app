@@ -64,7 +64,7 @@ return (
     </div>
     <Link href={"/new-session"} className="relative left-4 top-2">don&apos;t have one? generate now!</Link>
     </div>
-  {/* <iframe src="https://snazzymaps.com/embed/708506" className="absolute w-full h-full z-10 opacity-20"></iframe> */}
+  <iframe src="https://snazzymaps.com/embed/708506" className="absolute w-full h-full z-10 opacity-20 pointer-events-none"></iframe>
 </div>
 );
 }
