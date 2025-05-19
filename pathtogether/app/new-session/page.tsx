@@ -3,12 +3,16 @@
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { Plus, Minus } from "lucide-react";
-import { Cousine } from "./ui/fonts"; 
 import { cousine } from "../ui/fonts";
 
-export default function newSession() {
-  const [customFields, setCustomFields] = useState([]);
-  const [currentField, setCurrentField] = useState({ name: "", type: "string" });
+export default function NewSession() {
+  type CustomField = {
+    name: string;
+    type: string;
+  };
+
+  const [customFields, setCustomFields] = useState<CustomField[]>([]);
+  const [currentField, setCurrentField] = useState<CustomField>({ name: "", type: "string" });
 
   const addField = () => {
     if (currentField.name.trim() === "") return;
@@ -16,7 +20,7 @@ export default function newSession() {
     setCurrentField({ name: "", type: "string" });
   };
 
-  const removeField = (indexToRemove) => {
+  const removeField = (indexToRemove: number) => {
     setCustomFields(customFields.filter((_, index) => index !== indexToRemove));
   };
 

@@ -6,7 +6,7 @@ import { Switch } from '@headlessui/react'
 import { useState } from 'react'
 import { Button } from "../ui/button"
 
-export default function editSession() {
+export default function EditSession() {
     const [enabled, setEnabled] = useState(false)
 
     return (

@@ -12,7 +12,7 @@ function App() {
   const [sessionCode, setSessionCode] = useState("");
   const router = useRouter();
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       // router.push(`/edit-session/${sessionCode}`);
