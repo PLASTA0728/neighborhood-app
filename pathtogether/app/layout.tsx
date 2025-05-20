@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <script
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.API_KEY}`}
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_API_KEY}`}
           async
           defer
         ></script>
