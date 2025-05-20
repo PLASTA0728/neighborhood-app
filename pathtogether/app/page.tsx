@@ -1,16 +1,18 @@
 'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { Button }from "@/app/ui/button";
 import  "@/app/ui/start/page.css";
 import { jost } from "./ui/fonts";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import monochrome from "./ui/map-customization/monochrome.json";
 
 function App() {
   const [sessionCode, setSessionCode] = useState("");
   const router = useRouter();
+  const appRef = useRef(null);
+  const mapRef = useRef(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -20,7 +22,6 @@ function App() {
     }
   };
 
-  const appRef = useRef(null);
   // const toRef = useRef(null);
 
   useEffect(() => {
@@ -43,10 +44,44 @@ function App() {
     };
 }, [appRef]);
 
+useEffect(() => {
+  if (!window.google || !mapRef.current) return;
+
+  const initialCenter = { lat: 37.7749, lng: -122.4194 }; // San Francisco 
+  const map = new google.maps.Map(mapRef.current, {
+    center: initialCenter,
+    zoom: 10,
+    disableDefaultUI: true,
+    gestureHandling: "none",
+    keyboardShortcuts: false,
+    draggable: false,
+    scrollwheel: false,
+    zoomControl: false,
+    styles: monochrome,
+  });
+
+  let currentLng = initialCenter.lng;
+
+  const animateMap = () => {
+    currentLng += 0.001; // Adjust this value to control the speed of the animation
+    map.setCenter({ lat: initialCenter.lat, lng: currentLng });
+  };
+
+  const interval = setInterval(animateMap, 30); // Adjust the interval time as needed
+  return () => {
+    clearInterval(interval);
+  };
+}, []);
+
 return (
   <div className="static">
     <div className="absolute -z-10 w-full h-full" id="app" ref={appRef} data-scroll-container></div>
     <div className="absolute bg-black z-0 w-full h-full opacity-65"></div>
+     <div
+        ref={mapRef}
+        className="absolute w-full h-full z-10 opacity-10"
+        style={{ pointerEvents: "none" }}
+      ></div>
     <div className={`${jost.className} z-20 absolute top-1/2 left-1/7`}>
       <div className="text-6xl font-normal">PathTogether</div>
       <div className="text-3xl font-extralight">one map, every destination</div>
@@ -64,7 +99,6 @@ return (
     </div>
     <Link href={"/new-session"} className="relative left-4 top-2">don&apos;t have one? generate now!</Link>
     </div>
-  <iframe src="https://snazzymaps.com/embed/708506" className="absolute w-full h-full z-10 opacity-20 pointer-events-none"></iframe>
 </div>
 );
 }
