@@ -4,7 +4,7 @@
 // import { Fragment } from 'react'
 import { Switch } from '@headlessui/react'
 import { useState } from 'react'
-import { Button } from "../ui/button"
+import { Button } from "@/app/ui/button"
 
 export default function EditSession() {
     const [enabled, setEnabled] = useState(false)

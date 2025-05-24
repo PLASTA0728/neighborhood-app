@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from "react"
-import { Button } from "../ui/button"
+import { Button } from "@/app/ui/button"
 import { Plus, Minus } from "lucide-react";
-import { cousine } from "../ui/fonts";
+import { cousine } from "@/app/ui/fonts";
 
 export default function NewSession() {
   type CustomField = {
