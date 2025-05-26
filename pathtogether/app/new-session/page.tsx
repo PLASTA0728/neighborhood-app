@@ -6,22 +6,63 @@ import { Plus, Minus } from "lucide-react";
 import { cousine } from "@/app/ui/fonts";
 
 export default function NewSession() {
+  // database
+  const [groupName, setGroupName ] = useState("");
+  const [mapName, setMapName ] = useState("");
+  const [template, setTemplate ] = useState("");
+
+  // initialize for the states that are used on frontend
   type CustomField = {
-    name: string;
-    type: string;
+    fieldName: string;
+    fieldType: string;
   };
 
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
-  const [currentField, setCurrentField] = useState<CustomField>({ name: "", type: "string" });
+  const [currentField, setCurrentField] = useState<CustomField>({ fieldName: "", fieldType: "string" });
 
   const addField = () => {
-    if (currentField.name.trim() === "") return;
+    if (currentField.fieldName.trim() === "") return;
     setCustomFields([...customFields, currentField]);
-    setCurrentField({ name: "", type: "string" });
+    setCurrentField({ fieldName: "", fieldType: "string" });
   };
 
   const removeField = (indexToRemove: number) => {
     setCustomFields(customFields.filter((_, index) => index !== indexToRemove));
+  };
+
+  // post session function
+
+  const shareSession = async () => {
+    const payload = {
+      groupName,
+      mapName,
+      template,
+      customFields,
+    };
+
+
+    try {
+      const res = await fetch("api/maps", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (data.sucess) {
+        alert("Map created successfully!");
+      } else {
+        alert("server error: " + data.error);
+      }
+    } catch (error) {
+      console.error("Unexpected error", error);
+      alert("unexpected error occured.");
+    }
+
+    console.log(customFields);
   };
 
   return (
@@ -30,13 +71,16 @@ export default function NewSession() {
           <div className="text-2xl text-center mb-4">create a new map!</div>
           <div className="flex flex-col">
             <div className="mb-2">which group are you generating the map for?</div>
-            <input className="px-4 py-4 rounded-md bg-white text-gray-400" placeholder="my group"></input>
+            <input className="px-4 py-4 rounded-md bg-white text-gray-400" placeholder="my group" 
+              value={groupName} onChange={(e) => setGroupName(e.target.value)} />
             <div className="mt-4">how do you want to name the map?</div> 
             <div className="text-gray-400 text-sm mb-2">this would be the name of how it is stored on our server-end, but every member who export the map can customize on their end</div>
-            <input className="px-4 py-4 rounded-md bg-white text-gray-400" placeholder="map name"></input>
+            <input className="px-4 py-4 rounded-md bg-white text-gray-400" placeholder="map name" 
+              value={mapName} onChange={(e) => setMapName(e.target.value)} />
             <div className="mt-4">choose an existing template if you want!</div>
             <div className="flex flex-col items-center mt-2">
-              <select className="bg-gray-800 px-1 py-2 rounded-md text-center">
+              <select className="bg-gray-800 px-1 py-2 rounded-md text-center"
+                value={template} onChange={(e) => setTemplate(e.target.value)} >
                 <option>remote/online friends</option>
                 <option>high school seniors</option>
                 <option>college grads</option>
@@ -44,15 +88,15 @@ export default function NewSession() {
               </select>
             </div>
           </div>
-          <div className="mt-4">didn&apos;t find one template that suits you? add your own entries!</div>
+          <div className="mt-4">didn&apos;t find one template that suits you / want more customized fields? create your own!</div>
           <div className="flex justify-between items-center mt-2">
-            <input type="text" placeholder="entry name" className="p-2 bg-white rounded-md text-gray-400 w-2/3" 
-              value={currentField.name} 
-              onChange={(e)=> setCurrentField({...currentField, name: e.target.value})}
+            <input type="text" placeholder="field name" className="p-2 bg-white rounded-md text-gray-400 w-2/3" 
+              value={currentField.fieldName} 
+              onChange={(e)=> setCurrentField({...currentField, fieldName: e.target.value})}
             />
             <select className="bg-gray-800 px-1 py-2 rounded-md text-center"
-              value={currentField.type}
-              onChange={(e) => setCurrentField({ ...currentField, type: e.target.value })}
+              value={currentField.fieldType}
+              onChange={(e) => setCurrentField({ ...currentField, fieldType: e.target.value })}
             >
               <option value="string">string</option>
               <option value="number">number</option>
@@ -71,8 +115,8 @@ export default function NewSession() {
                 {customFields.map((field, index) => (
                   <div key={index} className="flex items-center justify-between mt-2">
                     <div className="flex items-center">
-                      <span className="text-gray-400">{field.name}</span>
-                      <span className={`${cousine.className} text-gray-600 bg-gray-100 ml-2 rounded-md px-2 text-sm`}>{field.type}</span>
+                      <span className="text-gray-400">{field.fieldName}</span>
+                      <span className={`${cousine.className} text-gray-600 bg-gray-100 ml-2 rounded-md px-2 text-sm`}>{field.fieldType}</span>
                     </div>
                     <button type="button" onClick={() => removeField(index)} className="text-white bg-red-500 text-center rounded-full">
                       <Minus size={16} />
@@ -88,7 +132,7 @@ export default function NewSession() {
           {/* You can later replace this with a real map component */}
           <div className="text-gray-600 text-xl">walkthrough on how to create the map and promotion of different styles will be displayed here</div>
         </div>
-        <Button className="fixed right-1/20 bottom-1/20">share my session!</Button>
+        <Button className="fixed right-1/20 bottom-1/20" onClick={shareSession}>share my session!</Button>
     </main>
   );
 }
