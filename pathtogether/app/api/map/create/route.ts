@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/app/lib/mongoose";
-import MapModel from "@/server/models/Map";
+import MapModel from "@/app/lib/models/Map";
 
 export async function POST(req: NextRequest) {
     await connectMongo();

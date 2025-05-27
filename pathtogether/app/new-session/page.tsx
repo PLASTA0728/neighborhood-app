@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/app/ui/button"
 import { Plus, Minus } from "lucide-react";
 import { cousine } from "@/app/ui/fonts";
+// import { generateUniqueSessionNo } from "@/app/lib/session-generator";
 
 export default function NewSession() {
   // database
@@ -30,6 +31,16 @@ export default function NewSession() {
     setCustomFields(customFields.filter((_, index) => index !== indexToRemove));
   };
 
+  async function createSession() {
+    const res = await fetch("api/generate-session", {
+      method: "POST",
+    });
+    const data = await res.json();
+    const sessionNo = data.sessionNo;
+    console.log("your session number is ", sessionNo);
+    return sessionNo;
+  }
+
   // post session function
 
   const shareSession = async () => {
@@ -37,12 +48,13 @@ export default function NewSession() {
       groupName,
       mapName,
       template,
-      customFields,
+      customFields, 
+      sessionNo: await createSession(),
     };
 
 
     try {
-      const res = await fetch("api/maps", {
+      const res = await fetch("api/map/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +74,7 @@ export default function NewSession() {
       alert("unexpected error occured.");
     }
 
-    console.log(customFields);
+    console.log(payload);
   };
 
   return (

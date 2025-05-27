@@ -52,4 +52,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.index({ location: '2dsphere' });
 
-export default mongoose.models.User || mongoose.model('User', userSchema); // first check if User model has already been registered in Mongoose, otherwise define a new model called User with userSchema
+const UserModel: Model<IUser> = models.User || model<IUser>('User', userSchema);
+
+export default UserModel;
