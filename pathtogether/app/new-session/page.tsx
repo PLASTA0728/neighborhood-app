@@ -31,6 +31,10 @@ export default function NewSession() {
     setCustomFields(customFields.filter((_, index) => index !== indexToRemove));
   };
 
+  // popup and show session
+  const [sessionNo, setSessionNo] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+
   async function createSession() {
     const res = await fetch("api/generate-session", {
       method: "POST",
@@ -44,12 +48,13 @@ export default function NewSession() {
   // post session function
 
   const shareSession = async () => {
+    const sessionNo = await createSession();
     const payload = {
       groupName,
       mapName,
       template,
       customFields, 
-      sessionNo: await createSession(),
+      sessionNo,
     };
 
 
@@ -64,18 +69,21 @@ export default function NewSession() {
 
       const data = await res.json();
 
-      if (data.sucess) {
-        alert("Map created successfully!");
-      } else {
+      if (!data.success) {
         alert("server error: " + data.error);
       }
     } catch (error) {
       console.error("Unexpected error", error);
       alert("unexpected error occured.");
     }
-
+    setSessionNo(sessionNo);
+    setShowPopup(true);
     console.log(payload);
   };
+
+  function hideSessionNo() {
+    setShowPopup(false);
+  }
 
   return (
     <main className="w-full h-screen flex">
@@ -145,6 +153,19 @@ export default function NewSession() {
           <div className="text-gray-600 text-xl">walkthrough on how to create the map and promotion of different styles will be displayed here</div>
         </div>
         <Button className="fixed right-1/20 bottom-1/20" onClick={shareSession}>share my session!</Button>
+        {showPopup && sessionNo && (
+          <div className="fixed inset-0 z-10">
+            <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
+            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-45 bg-white z-30 rounded-md text-gray-800 p-4">
+              <div>
+                your session code has been generated successfully 🎉 you can share this with your friends to join the map.
+              </div>
+              <div className="text-center text-2xl font-bold mt-2">
+                {`session code: ${sessionNo}`}
+              </div>
+            </div>
+          </div>
+        )}
     </main>
   );
 }
