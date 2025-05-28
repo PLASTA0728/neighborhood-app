@@ -40,15 +40,20 @@ export default function NewSession() {
       method: "POST",
     });
     const data = await res.json();
-    const sessionNo = data.sessionNo;
-    console.log("your session number is ", sessionNo);
-    return sessionNo;
+    console.log("your session number is ", data.sessionNo);
+    return data.sessionNo;
   }
 
   // post session function
 
   const shareSession = async () => {
-    const sessionNo = await createSession();
+    let finalSessionNo = sessionNo;
+
+    if (!sessionNo) {
+      finalSessionNo = await createSession();
+      setSessionNo(finalSessionNo);
+    }
+
     const payload = {
       groupName,
       mapName,
@@ -69,16 +74,17 @@ export default function NewSession() {
 
       const data = await res.json();
 
-      if (!data.success) {
+      if (data.success) {
+        setSessionNo(finalSessionNo);
+        setShowPopup(true);
+        console.log(payload);
+      } else {
         alert("server error: " + data.error);
       }
     } catch (error) {
       console.error("Unexpected error", error);
       alert("unexpected error occured.");
     }
-    setSessionNo(sessionNo);
-    setShowPopup(true);
-    console.log(payload);
   };
 
   function hideSessionNo() {
