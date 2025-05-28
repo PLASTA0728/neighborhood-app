@@ -59,7 +59,7 @@ export default function NewSession() {
       mapName,
       template,
       customFields, 
-      sessionNo,
+      finalSessionNo,
     };
 
 

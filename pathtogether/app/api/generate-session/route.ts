@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import MapModel from "@/app/lib/models/Map";
 import crypto from "crypto";
 import next from "next";
+import connectMongo from "@/app/lib/mongoose";
+import { connect } from "http2";
 
 function generateRandomString(length: number): string {
     return crypto.randomBytes(length)
@@ -28,6 +30,8 @@ async function generateUniqueSessionNo(length = 8): Promise<string> {
 
 export async function POST() {
     try {
+        await connectMongo();
+        
         const sessionNo = await generateUniqueSessionNo();
         return NextResponse.json({ sessionNo });
     } catch (error) {
