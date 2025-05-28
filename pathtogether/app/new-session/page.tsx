@@ -49,7 +49,7 @@ export default function NewSession() {
   const shareSession = async () => {
     let finalSessionNo = sessionNo;
 
-    if (!sessionNo) {
+    if (sessionNo===null) {
       finalSessionNo = await createSession();
       setSessionNo(finalSessionNo);
     }
@@ -59,7 +59,7 @@ export default function NewSession() {
       mapName,
       template,
       customFields, 
-      finalSessionNo,
+      sessionNo: finalSessionNo,
     };
 
 
