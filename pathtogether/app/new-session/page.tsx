@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from "react"
-import { Button } from "@/app/ui/button"
+import { Button } from "@/ui/button"
 import { Plus, Minus } from "lucide-react";
-import { cousine } from "@/app/ui/fonts";
+import { cousine } from "@/ui/fonts";
 // import { generateUniqueSessionNo } from "@/app/lib/session-generator";
 
 export default function NewSession() {
