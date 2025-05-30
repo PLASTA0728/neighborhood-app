@@ -39,6 +39,8 @@ const mapSchema = new mongoose.Schema<IMap>({
     timestamps: true,
 });
 
+mapSchema.index({ sessionNo: 1 });
+
 const MapModel: Model<IMap> = models.Map || model<IMap>('Map', mapSchema);
 
 export default MapModel;
