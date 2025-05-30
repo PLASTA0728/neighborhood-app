@@ -10,6 +10,7 @@ export function useSessionSubmit(submittedSessionNo, setSubmittedSessionNo) {
         const res = await fetch(`/api/check-session?sessionNo=${submittedSessionNo}`);
         const data = await res.json();
         if (data.success) {
+            console.log(`found session ${submittedSessionNo}, redirecting to edit page ...`);
             router.push(`${submittedSessionNo}/edit`);
         } else {
             alert("session not found. plz check the session code");
