@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 import MapModel from "@/lib/models/Map";
 import crypto from "crypto";
-import next from "next";
 import connectMongo from "@/lib/db/connectMongo";
-import { connect } from "http2";
 
 function generateRandomString(length: number): string {
     return crypto.randomBytes(length)

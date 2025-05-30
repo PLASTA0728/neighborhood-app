@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import MapModel from "./models/Map";
 import UserModel from "./models/User";
+import connectMongo from "./db/connectMongo";
 
 export async function getMapParameters(sessionNo: string) {
     try {
@@ -21,12 +22,8 @@ export async function getMapParameters(sessionNo: string) {
 
 export async function getUsersBySession(sessionNo: string) {
     try {
-        await mongoose.connect(process.env.MONGODB_URI || "", {
-            dbName: "pathtgt-main",
-            bufferCommands: false,
-        });
-
-        const users = await UserModel.find()
+        await connectMongo();
+        const users = await UserModel.find({ sessionNo });
         return users;
     } catch (error) {
         console.error("Error fetching users by session:", error);

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectMongo from '@/lib/db/connectMongo'; // assuming you have a DB util function
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
