@@ -15,6 +15,7 @@ export default function NewSession() {
     setShowPopup,
     hasCreatedSession,
     hasUpdatedSession,
+    setHasUpdatedSession,
     shareSession,
   } = useSessionManager();
 
@@ -44,6 +45,7 @@ export default function NewSession() {
 
   function hideSessionNo() {
     setShowPopup(false);
+    setHasUpdatedSession(true);
   }
 
   return (

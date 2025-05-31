@@ -73,6 +73,7 @@ export function useSessionManager() {
         setShowPopup,
         hasCreatedSession,
         hasUpdatedSession,
+        setHasUpdatedSession,
         shareSession,
     };
 }
