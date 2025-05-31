@@ -37,6 +37,7 @@ export default function NewSession() {
 
   // check if has created session or not 
   const [hasCreatedSession, setHasCreatedSession] = useState(false);
+  const [hasUpdatedSession, setHasUpdatedSession] = useState(false);
 
   async function createSession() {
     const res = await fetch("api/generate-session", {
@@ -72,7 +73,9 @@ export default function NewSession() {
     try {
       const endpoint = hasCreatedSession ? `api/map/update?sessionNo=${sessionNo}` : "api/map/create";
       console.log(hasCreatedSession, endpoint);
-
+      if (hasCreatedSession) {
+        setHasUpdatedSession(true);
+      }
       const res = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -115,7 +118,8 @@ export default function NewSession() {
             <div className="mt-4">choose an existing template if you want!</div>
             <div className="flex flex-col items-center mt-2">
               <select className="bg-gray-800 px-1 py-2 rounded-md text-center"
-                value={template} onChange={(e) => setTemplate(e.target.value)} >
+                value={template} onChange={(e) => setTemplate(e.target.value)}>
+                <option> - </option>
                 <option>remote/online friends</option>
                 <option>high school seniors</option>
                 <option>college grads</option>
@@ -168,19 +172,27 @@ export default function NewSession() {
           <div className="text-gray-600 text-xl">walkthrough on how to create the map and promotion of different styles will be displayed here</div>
         </div>
         <Button className="fixed right-1/20 bottom-1/20" onClick={shareSession}>share my session!</Button>
-        {showPopup && sessionNo && (
+        {showPopup && (
           <div className="fixed inset-0 z-10">
             <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-45 bg-white z-30 rounded-md text-gray-800 p-4">
-              <div>
-                your session code has been generated successfully 🎉 you can share this with your friends to join the map.
-              </div>
+              { !hasUpdatedSession && (
+                <div>
+                  your session code has been generated successfully 🎉 you can share this with your friends to join the map.
+                </div>
+              )}
+              { hasUpdatedSession && (
+                <div>
+                  your map setting has been updated successfully 🎉 use the same session code to share to your friends.
+                </div>
+              )}
               <div className="text-center text-2xl font-bold mt-2">
                 {`session code: ${sessionNo}`}
               </div>
             </div>
           </div>
         )}
+        
     </main>
   );
 }
