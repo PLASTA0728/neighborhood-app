@@ -1,9 +1,5 @@
 import mongoose, { model, models, Model } from 'mongoose';
 
-export interface ILocationCoordinates {
-
-}
-
 export interface IUser {
     sessionNo: string;
     name: string;
