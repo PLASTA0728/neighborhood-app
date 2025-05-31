@@ -70,7 +70,7 @@ export default function NewSession() {
     };
 
     try {
-      const endpoint = hasCreatedSession ? "api/map/update" : "api/map/create";
+      const endpoint = hasCreatedSession ? `api/map/update?sessionNo=${sessionNo}` : "api/map/create";
       console.log(hasCreatedSession, endpoint);
 
       const res = await fetch(endpoint, {
