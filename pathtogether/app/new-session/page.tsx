@@ -13,7 +13,6 @@ export default function NewSession() {
     sessionNo,
     showPopup,
     setShowPopup,
-    hasCreatedSession,
     hasUpdatedSession,
     setHasUpdatedSession,
     shareSession,

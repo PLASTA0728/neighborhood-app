@@ -6,7 +6,6 @@ import { Switch } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 import { Button } from "@/ui/button"
 import { useParams, useRouter } from 'next/navigation'
-import { notFound } from 'next/navigation'
 
 export default function EditSession() {
     const { sessionNo } = useParams();

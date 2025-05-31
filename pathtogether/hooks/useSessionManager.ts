@@ -71,7 +71,6 @@ export function useSessionManager() {
         sessionNo,
         showPopup,
         setShowPopup,
-        hasCreatedSession,
         hasUpdatedSession,
         setHasUpdatedSession,
         shareSession,
