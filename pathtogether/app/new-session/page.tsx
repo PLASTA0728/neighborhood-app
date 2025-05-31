@@ -4,9 +4,20 @@ import { useState } from "react"
 import { Button } from "@/ui/button"
 import { Plus, Minus } from "lucide-react";
 import { cousine } from "@/ui/fonts";
+import { useSessionManager } from "@/hooks/useSessionManager";
 // import { generateUniqueSessionNo } from "@/app/lib/session-generator";
 
+
 export default function NewSession() {
+  const { // hooks must be inside
+    sessionNo,
+    showPopup,
+    setShowPopup,
+    hasCreatedSession,
+    hasUpdatedSession,
+    shareSession,
+  } = useSessionManager();
+
   // database
   const [groupName, setGroupName ] = useState("");
   const [mapName, setMapName ] = useState("");
@@ -29,74 +40,6 @@ export default function NewSession() {
 
   const removeField = (indexToRemove: number) => {
     setCustomFields(customFields.filter((_, index) => index !== indexToRemove));
-  };
-
-  // popup and show session
-  const [sessionNo, setSessionNo] = useState<string | null>(null);
-  const [showPopup, setShowPopup] = useState(false);
-
-  // check if has created session or not 
-  const [hasCreatedSession, setHasCreatedSession] = useState(false);
-  const [hasUpdatedSession, setHasUpdatedSession] = useState(false);
-
-  async function createSession() {
-    const res = await fetch("api/generate-session", {
-      method: "POST",
-    });
-    const data = await res.json();
-
-    if (!data.sessionNo) throw new Error("Session creation failed");
-
-    console.log("your session number is ", data.sessionNo);
-    return data.sessionNo;
-  }
-
-  // post session function
-
-  const shareSession = async () => {
-    let finalSessionNo = sessionNo;
-
-    if (!hasCreatedSession) {
-      finalSessionNo = await createSession();
-      setSessionNo(finalSessionNo);
-      setHasCreatedSession(true);
-    }
-
-    const payload = {
-      groupName,
-      mapName,
-      template,
-      customFields, 
-      sessionNo: finalSessionNo,
-    };
-
-    try {
-      const endpoint = hasCreatedSession ? `api/map/update?sessionNo=${sessionNo}` : "api/map/create";
-      console.log(hasCreatedSession, endpoint);
-      if (hasCreatedSession) {
-        setHasUpdatedSession(true);
-      }
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        setSessionNo(finalSessionNo);
-        setShowPopup(true);
-        console.log(payload);
-      } else {
-        alert("server error: " + data.error);
-      }
-    } catch (error) {
-      console.error("Unexpected error", error);
-      alert("unexpected error occured.");
-    }
   };
 
   function hideSessionNo() {
@@ -171,7 +114,15 @@ export default function NewSession() {
           {/* You can later replace this with a real map component */}
           <div className="text-gray-600 text-xl">walkthrough on how to create the map and promotion of different styles will be displayed here</div>
         </div>
-        <Button className="fixed right-1/20 bottom-1/20" onClick={shareSession}>share my session!</Button>
+        <Button className="fixed right-1/20 bottom-1/20"
+          onClick={() =>
+            shareSession({ groupName, mapName, template, customFields }).catch((e) =>
+              alert("something broke: " + e.message)
+            )
+          }
+        >
+          share my session!
+        </Button>
         {showPopup && (
           <div className="fixed inset-0 z-10">
             <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
