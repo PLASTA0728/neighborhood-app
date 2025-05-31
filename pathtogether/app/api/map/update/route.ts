@@ -12,7 +12,8 @@ export async function POST(req: NextRequest) {
     try {
         await MapModel.deleteMany({ sessionNo: sessionNo });
         // console.log(sessionNo);
-        const result = await MapModel.insertOne(body);
+        // const result = 
+        await MapModel.insertOne(body);
         // console.log("insert result:", result);
         return NextResponse.json({ success: true});
     } catch (error) {
