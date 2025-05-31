@@ -35,11 +35,17 @@ export default function NewSession() {
   const [sessionNo, setSessionNo] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
 
+  // check if has created session or not 
+  const [hasCreatedSession, setHasCreatedSession] = useState(false);
+
   async function createSession() {
     const res = await fetch("api/generate-session", {
       method: "POST",
     });
     const data = await res.json();
+
+    if (!data.sessionNo) throw new Error("Session creation failed");
+
     console.log("your session number is ", data.sessionNo);
     return data.sessionNo;
   }
@@ -49,9 +55,10 @@ export default function NewSession() {
   const shareSession = async () => {
     let finalSessionNo = sessionNo;
 
-    if (sessionNo===null) {
+    if (!hasCreatedSession) {
       finalSessionNo = await createSession();
       setSessionNo(finalSessionNo);
+      setHasCreatedSession(true);
     }
 
     const payload = {
@@ -62,9 +69,11 @@ export default function NewSession() {
       sessionNo: finalSessionNo,
     };
 
-
     try {
-      const res = await fetch("api/map/create", {
+      const endpoint = hasCreatedSession ? "api/map/update" : "api/map/create";
+      console.log(hasCreatedSession, endpoint);
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

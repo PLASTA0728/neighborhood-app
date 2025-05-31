@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import connectMongo from '@/lib/db/connectMongo'; // assuming you have a DB util function
-// import { ObjectId } from 'mongodb';
+import checkSessionExists from '@/lib/db/checkSessionExists';
 
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
@@ -11,12 +10,9 @@ export async function GET(req: Request) {
     }
 
     try {
-        const client = await connectMongo();
-        const db = client.db("pathtgt-main");
-        const collection = db.collection("maps");
-        const session = await collection.findOne({ sessionNo });
-
-        if (session) {
+        const exists = await checkSessionExists(sessionNo);
+        console.log(sessionNo, exists);
+        if (exists) {
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ success: false, error: 'Session not found' });

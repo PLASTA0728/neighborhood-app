@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import MapModel from "@/lib/models/Map";
 import crypto from "crypto";
-import connectMongo from "@/lib/db/connectMongo";
+import checkSessionExists from "@/lib/db/checkSessionExists";
 
 function generateRandomString(length: number): string {
     return crypto.randomBytes(length)
@@ -13,22 +12,25 @@ function generateRandomString(length: number): string {
 async function generateUniqueSessionNo(length = 8): Promise<string> {
     let sessionNo: string;
     let isUnique = false;
+    let attempts = 0;
+    const maxAttempts = 5;
 
-    while (!isUnique) {
+    while (!isUnique && attempts < maxAttempts) {
+        attempts++;
         sessionNo = generateRandomString(length);
-        const existing = await MapModel.findOne({ sessionNo }).exec();
+        const existing = await checkSessionExists(sessionNo);
+        console.log(sessionNo, "existence", existing);
         if (!existing) {
             isUnique = true;
         }
     }
+    if (!isUnique) throw new Error("Failed to generate unique session number, please try again");
 
     return sessionNo;
 }
 
 export async function POST() {
     try {
-        await connectMongo();
-        
         const sessionNo = await generateUniqueSessionNo();
         return NextResponse.json({ sessionNo });
     } catch (error) {
