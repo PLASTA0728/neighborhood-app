@@ -1,14 +1,21 @@
-import { MongoClient } from 'mongodb';
+import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
-const client = new MongoClient(MONGODB_URI);
+const MONGODB_URI = `${process.env.MONGODB_URI}`;
+const dbName = 'pathtgt-main';
 
-let cachedClient: MongoClient | null = null;
+let isConnected = false;
 
 export default async function connectMongo() {
-    if (cachedClient) return cachedClient;
+  if (isConnected) return;
 
-    await client.connect();
-    cachedClient = client;
-    return client;
+  try {
+    await mongoose.connect(MONGODB_URI, {
+      dbName: dbName,
+    });
+    isConnected = true;
+    console.log(`✅ Connected to MongoDB with Mongoose`);
+  } catch (err) {
+    console.error("❌ Mongoose connection error:", err);
+    throw err;
+  }
 }
