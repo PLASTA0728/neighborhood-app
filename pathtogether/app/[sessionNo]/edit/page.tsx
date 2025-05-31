@@ -3,11 +3,38 @@
 // import clsx from "clsx";
 // import { Fragment } from 'react'
 import { Switch } from '@headlessui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/ui/button"
+import { useParams, useRouter } from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 export default function EditSession() {
-    const [enabled, setEnabled] = useState(false)
+    const { sessionNo } = useParams();
+    const router = useRouter();
+    const [mapDoc, setMapDoc] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const [enabled, setEnabled] = useState(false);
+
+    useEffect(() => {
+        const fetchMap = async() => {
+            setLoading(true);
+            const res = await fetch(`/api/map/get?sessionNo=${sessionNo}`);
+            const data = await res.json();
+
+            if (!data.success || !data.map) {
+                router.push('/not-found');
+            } else {
+                setMapDoc(data.map);
+                setLoading(false);
+            }
+        };
+
+        if (sessionNo) fetchMap();
+    }, [sessionNo, router])
+    console.log(mapDoc);
+
+    if (loading) return <p>Loading map...</p>;
 
     return (
         <main className="w-full h-screen flex">
