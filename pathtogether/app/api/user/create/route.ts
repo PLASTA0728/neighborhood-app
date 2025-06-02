@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const newUser = await UserModel.create(body);
-        return NextResponse.json({ success: true, user: new UserModel });
+        return NextResponse.json({ success: true, user: newUser });
     } catch (error) {
         return NextResponse.json({ success: false, error: String(error) }, { status: 500 })
     }

@@ -1,6 +1,9 @@
 import mongoose, { Schema, Model, models, model, Document } from 'mongoose';
 
- 
+export interface ICustomField {
+    fieldName?: string;
+    fieldType?: string;
+}
 
 export interface IMap extends Document {
     groupName: string;
