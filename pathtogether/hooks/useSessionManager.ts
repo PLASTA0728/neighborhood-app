@@ -10,7 +10,7 @@ export type CustomField = {
 type Payload = {
     groupName: string;
     mapName: string;
-    template: string;
+    // template: string;
     customFields: CustomField[];
 };
 

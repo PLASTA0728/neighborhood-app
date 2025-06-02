@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import MapModel from "./models/Map";
-import UserModel from "./models/User";
+import SessionModel from "./models/Session";
 import connectMongo from "./db/connectMongo";
 
 export async function getMapParameters(sessionNo: string) {
@@ -23,7 +23,7 @@ export async function getMapParameters(sessionNo: string) {
 export async function getUsersBySession(sessionNo: string) {
     try {
         await connectMongo();
-        const users = await UserModel.find({ sessionNo });
+        const users = await SessionModel.find({ sessionNo });
         return users;
     } catch (error) {
         console.error("Error fetching users by session:", error);

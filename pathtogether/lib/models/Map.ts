@@ -9,7 +9,7 @@ export interface IMap extends Document {
     groupName: string;
     mapName: string;
     sessionNo: string;
-    template?: string;
+    // template?: string;
     customFields?: ICustomField[];
 }
 
@@ -28,11 +28,6 @@ const mapSchema = new mongoose.Schema<IMap>({
     groupName: { type: String, required: true, },
     mapName: { type: String, required: true, },
     sessionNo: { type: String, required: true, unique: true },
-    template: {
-        type: String, 
-        // enum: ["remote/online friends", "high school seniors", "college grads", "alumni connects"],
-        required: false, 
-    },
     customFields: [customFieldSchema],
 },
 {
