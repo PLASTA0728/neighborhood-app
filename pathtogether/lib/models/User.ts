@@ -9,7 +9,11 @@ export interface IUser {
     location: {
         type: 'Point'; 
         coordinates: [number, number]; // longitude, latitude
-    }
+    };
+    customResponses: {
+        fieldName: string;
+        response: string;
+    }[];
 }
 
 const userSchema = new mongoose.Schema({
@@ -29,7 +33,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    role: {
+    role: { 
         type: String,
         required: true,
     },
@@ -37,13 +41,19 @@ const userSchema = new mongoose.Schema({
         type: {
             type: String,
             enum: ['Point'],
-            required: true,
+            required: false,
         },
         coordinates: {
             type: [Number],
-            required: true,
+            required: false,
         }
-    }
+    },
+    customResponses: [
+        {
+            fieldName: { type: String, required: true },
+            response: { type: String, required: true }
+        }
+    ]
 });
 
 userSchema.index({ location: '2dsphere' });

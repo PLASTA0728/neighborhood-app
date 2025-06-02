@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/ui/button"
 import { Plus, Minus } from "lucide-react";
 import { cousine } from "@/ui/fonts";
 import { useSessionManager } from "@/hooks/useSessionManager";
+import { getFieldsForTemplate } from '@/lib/getFieldsForTemplate'
+
 // import { generateUniqueSessionNo } from "@/app/lib/session-generator";
 
 
@@ -46,6 +48,11 @@ export default function NewSession() {
     setShowPopup(false);
     setHasUpdatedSession(true);
   }
+
+  useEffect(() => {
+    const fields = getFieldsForTemplate(template);
+    setCustomFields(fields);
+  }, [template])
 
   return (
     <main className="w-full h-screen flex">
