@@ -6,7 +6,7 @@ import { Plus, Minus } from "lucide-react";
 import { cousine } from "@/ui/fonts";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { getFieldsForTemplate } from '@/lib/getFieldsForTemplate'
-
+import FormInput from "@/components/FormInput";
 // import { generateUniqueSessionNo } from "@/app/lib/session-generator";
 
 
@@ -55,17 +55,16 @@ export default function NewSession() {
   }, [template])
 
   return (
-    <main className="w-full h-screen flex">
-        <div className="w-2/5 pt-4 pl-4 pr-4">
+    <main className="relative w-full h-screen">
+      <div className="flex flex-col sm:flex-row h-screen w-full">
+        <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 flex flex-col relative">
           <div className="text-2xl text-center mb-4">create a new map!</div>
           <div className="flex flex-col">
             <div className="mb-2">which group are you generating the map for?</div>
-            <input className="px-4 py-4 rounded-md bg-white text-gray-400" placeholder="my group" 
-              value={groupName} onChange={(e) => setGroupName(e.target.value)} />
+            <FormInput placeholder="my group" value={groupName} onChange={setGroupName}/>
             <div className="mt-4">how do you want to name the map?</div> 
             <div className="text-gray-400 text-sm mb-2">this would be the name of how it is stored on our server-end, but every member who export the map can customize on their end</div>
-            <input className="px-4 py-4 rounded-md bg-white text-gray-400" placeholder="map name" 
-              value={mapName} onChange={(e) => setMapName(e.target.value)} />
+            <FormInput placeholder="map name" value={mapName} onChange={setMapName}/>
             <div className="mt-4">choose an existing template if you want!</div>
             <div className="flex flex-col items-center mt-2">
               <select className="bg-gray-800 px-1 py-2 rounded-md text-center"
@@ -116,42 +115,47 @@ export default function NewSession() {
               </div>
             </div>
           )}
-          
+          <Button
+            className="
+              mt-6 
+              sm:fixed sm:right-10 sm:bottom-10 
+              z-30 
+              self-center sm:self-auto
+            "
+            onClick={() =>
+              shareSession({ groupName, mapName, customFields }).catch((e) =>
+                alert("something broke: " + e.message)
+              )
+            }
+          >
+            share my session!
+          </Button>
         </div>
-        <div className="w-3/5 bg-gray-100 flex items-center justify-center p-10">
+        <div className="flex-1 bg-gray-100 flex items-center justify-center p-10">
           {/* You can later replace this with a real map component */}
           <div className="text-gray-600 text-xl">walkthrough on how to create the map and promotion of different styles will be displayed here</div>
         </div>
-        <Button className="fixed right-1/20 bottom-1/20"
-          onClick={() =>
-            shareSession({ groupName, mapName, template, customFields }).catch((e) =>
-              alert("something broke: " + e.message)
-            )
-          }
-        >
-          share my session!
-        </Button>
-        {showPopup && (
-          <div className="fixed inset-0 z-10">
-            <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-45 bg-white z-30 rounded-md text-gray-800 p-4">
-              { !hasUpdatedSession && (
-                <div>
-                  your session code has been generated successfully 🎉 you can share this with your friends to join the map.
-                </div>
-              )}
-              { hasUpdatedSession && (
-                <div>
-                  your map setting has been updated successfully 🎉 use the same session code to share to your friends.
-                </div>
-              )}
-              <div className="text-center text-2xl font-bold mt-2">
-                {`session code: ${sessionNo}`}
+      </div>
+      {showPopup && (
+        <div className="fixed inset-0 z-40">
+          <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-45 bg-white z-30 rounded-md text-gray-800 p-4">
+            { !hasUpdatedSession && (
+              <div>
+                your session code has been generated successfully 🎉 you can share this with your friends to join the map.
               </div>
+            )}
+            { hasUpdatedSession && (
+              <div>
+                your map setting has been updated successfully 🎉 use the same session code to share to your friends.
+              </div>
+            )}
+            <div className="text-center text-2xl font-bold mt-2">
+              {`session code: ${sessionNo}`}
             </div>
           </div>
-        )}
-        
+        </div>
+      )}
     </main>
   );
 }

@@ -22,7 +22,7 @@ export default function App() {
       <div className={`${jost.className} z-20 absolute top-1/2 left-1/7`}>
         <div className="text-6xl font-normal">PathTogether</div>
         <div className="text-3xl font-extralight">one map, every destination</div>
-      </div>
+      </div> 
       <div className="absolute top-1/2 left-3/5">
       <SessionInput value={submittedSessionNo} onChange={setSubmittedSessionNo} />
       <Link href={"/new-session"} className="relative left-4 top-2">don&apos;t have one? generate now!</Link>

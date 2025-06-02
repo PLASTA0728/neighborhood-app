@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/ui/styles/globals.css";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <script
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_API_KEY}`}
           async
