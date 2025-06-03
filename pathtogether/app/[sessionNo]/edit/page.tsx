@@ -3,7 +3,7 @@
 // import clsx from "clsx";
 // import { Fragment } from 'react'
 import { Switch } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Button } from "@/ui/button"
 import { useParams, useRouter } from 'next/navigation'
 import { cousine } from '@/ui/fonts'
@@ -11,6 +11,8 @@ import FormInput from '@/components/FormInput'
 import { saveUser } from '@/utils/saveUser'
 import CustomFieldList from '@/components/CustomFieldList'
 import type { IUser } from '@/lib/models/Session'
+import Card from '@/components/Card'
+
 
 export default function EditSession() {
     const { sessionNo } = useParams();
@@ -64,9 +66,8 @@ export default function EditSession() {
         if (sessionNo) fetchMap();
     }, [sessionNo, router])
     console.log(mapDoc);
-
-    useEffect(() => {
-        const fetchUsers = async() => {
+    
+    const fetchUsers = useCallback(async() => {
             try {
                 const res = await fetch(`/api/user/get?sessionNo=${sessionNo}`);
                 if (!res.ok) {
@@ -79,19 +80,18 @@ export default function EditSession() {
             } catch (err) {
                 console.error("failed to fetch users", err);
             }
-        };
-        
-        fetchUsers();
     }, [sessionNo]);
-    
-    console.log(users);
+
+    useEffect(() => {
+        fetchUsers();
+    }, [fetchUsers]);
 
     if (loading) return <p>Loading map...</p>;
 
     return (
-    <main className="relative w-full h-screen">
-        <div className='flex flex-col sm:flex-row h-screen w-full'>
-            <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 flex flex-col relative">
+    <main className="relative w-full">
+        <div className='flex flex-col sm:flex-row min-h-screen w-full'>
+            <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 relative">
                 <div className='text-2xl text-center'>
                 take me on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map for <span className='text-emerald-400'>{mapDoc?.groupName}</span>!
                 </div>
@@ -99,7 +99,7 @@ export default function EditSession() {
                 session code: {mapDoc?.sessionNo}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 pb-4">
+                <div className="flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4">
                 <FormInput placeholder='my name' value={name} onChange={setName}/>
                 <FormInput placeholder='my age' value={age} onChange={setAge}/>
                 <FormInput placeholder='my contact' value={contact} onChange={setContact}/>
@@ -140,24 +140,39 @@ export default function EditSession() {
                 <Button
                     className="mt-4"
                     type="submit"
-                    onClick={() =>
-                        saveUser(sessionNo.toString(), { name, age, contact, role, customResponses })
-                        .then(() => alert("user saved!"))
-                        .catch((e) => alert("something broke: " + e.message))
-                    }
-                    >
+                    onClick={async () => {
+                        try {
+                            await saveUser(sessionNo.toString(), {
+                                name, 
+                                age,
+                                contact,
+                                role, 
+                                customResponses
+                            });
+                            alert("user saved!");
+                            fetchUsers();
+                        } catch (e) {
+                            alert("something broke: " + e.message + " :( ");
+                        }
+                    }}
+                >
                     ping myself on the map!
                 </Button>
                 </div>
             </div>
 
-            <div className="flex-1 bg-gray-200 flex items-center justify-center">
-                <div className='grid grid-col gap-4'>
-                    {users.map((user, i) => (
-                        <div key={i} className='border rounded-xl p-4 shadow'>
-                            <h2 className='font-bold text-lg text-black'>{user.name}</h2>
-                        </div>
-                    ))}
+            <div className="flex-1 bg-gray-100 p-4 relative min-h-screen">
+                <Button className="absolute top-4 right-4 z-30" onClick={fetchUsers}>
+                    refresh
+                </Button>
+                <div className='w-full flex justify-center'>
+                <div className='mt-16 flex flex-wrap gap-4 justify-start'>
+                    {Array.isArray(users) && users.length > 0 ? (
+                        users.map((user, i) => <Card key={i} user={user} />)
+                    ) : (
+                        <p className='text-sm text-gray-400 text-center'>no users. <span className='inline italic'>yet?</span></p>
+                    )}
+                </div>
                 </div>
             </div>
         </div>

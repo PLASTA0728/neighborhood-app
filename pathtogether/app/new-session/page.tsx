@@ -116,12 +116,7 @@ export default function NewSession() {
             </div>
           )}
           <Button
-            className="
-              mt-6 
-              sm:fixed sm:right-10 sm:bottom-10 
-              z-30 
-              self-center sm:self-auto
-            "
+            className=" mt-6 sm:fixed sm:right-10 sm:bottom-10 z-30 self-center sm:self-auto "
             onClick={() =>
               shareSession({ groupName, mapName, customFields }).catch((e) =>
                 alert("something broke: " + e.message)

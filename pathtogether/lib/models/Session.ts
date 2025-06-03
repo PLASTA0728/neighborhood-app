@@ -41,6 +41,7 @@ const userSchema = new Schema({
         {
             fieldName: { type: String, required: true },
             response: { type: String, required: true },
+            _id: false,
         }
     ]
 });
