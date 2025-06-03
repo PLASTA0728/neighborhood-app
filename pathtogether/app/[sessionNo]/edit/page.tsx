@@ -10,6 +10,7 @@ import { cousine } from '@/ui/fonts'
 import FormInput from '@/components/FormInput'
 import { saveUser } from '@/utils/saveUser'
 import CustomFieldList from '@/components/CustomFieldList'
+import type { IUser } from '@/lib/models/Session'
 
 export default function EditSession() {
     const { sessionNo } = useParams();
@@ -28,8 +29,10 @@ export default function EditSession() {
         fieldName: string;
         response: string;
     }
-
+    // for auto generate custom fields 
     const [customResponses, setCustomResponses] = useState<CustomResponse[]>([]);
+    // for the user cards
+    const [users, setUsers] = useState<IUser[]>([]);
 
     const handleCustomChange = (fieldName: string, value: string) => {
         setCustomResponses(prev => {
@@ -61,6 +64,27 @@ export default function EditSession() {
         if (sessionNo) fetchMap();
     }, [sessionNo, router])
     console.log(mapDoc);
+
+    useEffect(() => {
+        const fetchUsers = async() => {
+            try {
+                const res = await fetch(`/api/user/get?sessionNo=${sessionNo}`);
+                if (!res.ok) {
+                    const text = await res.text(); // read raw response
+                    console.error("API returned error:", res.status, text);
+                    return;
+                }
+                const data = await res.json();
+                setUsers(data);
+            } catch (err) {
+                console.error("failed to fetch users", err);
+            }
+        };
+        
+        fetchUsers();
+    }, [sessionNo]);
+    
+    console.log(users);
 
     if (loading) return <p>Loading map...</p>;
 
@@ -128,7 +152,13 @@ export default function EditSession() {
             </div>
 
             <div className="flex-1 bg-gray-200 flex items-center justify-center">
-                <div className="text-gray-600 text-xl">Map will be displayed here</div>
+                <div className='grid grid-col gap-4'>
+                    {users.map((user, i) => (
+                        <div key={i} className='border rounded-xl p-4 shadow'>
+                            <h2 className='font-bold text-lg text-black'>{user.name}</h2>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     </main>

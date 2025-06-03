@@ -21,7 +21,7 @@ export default function CustomFieldList({ fields, responses, onChange }: Props) 
             {fields.map((field, index) => {
                 const existing = responses.find(r => r.fieldName === field.fieldName);
                 return (
-                    <FormInput key={index} placeholder={field.fieldName} value={existing?.response || ""} onChange={(val) => (field.fieldName, val)}/>
+                    <FormInput key={index} placeholder={field.fieldName} value={existing?.response || ""} onChange={(val) => onChange(field.fieldName, val)}/>
                 )
             })}
         </div>

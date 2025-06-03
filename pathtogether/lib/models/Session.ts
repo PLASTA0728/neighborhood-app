@@ -1,11 +1,11 @@
-import mongoose, { Schema, model, models, Model } from 'mongoose';
+import { Schema, model, models, Model } from 'mongoose';
 
 interface CustomResponse {
   fieldName: string;
   response: string;
 }
 
-interface IUser {
+export interface IUser {
   name: string;
   age: string;
   contact: string;
