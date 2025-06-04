@@ -10,10 +10,10 @@ export interface IUser {
   age: string;
   contact: string;
   role: string;
-  location?: {
-    type: 'Point';
-    coordinates: [number, number];
-  };
+  // location?: {
+  //   type: 'Point';
+  //   coordinates: [number, number];
+  // };
   customResponses: CustomResponse[];
 }
 
@@ -25,26 +25,28 @@ interface ISession {
 }
 
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>(
+  {
     name: {type: String, required: true },
     age: {type: String, required: true },
     contact: {type: String, required: true },
     role: {type: String, required: true },
-    location: {
-        type: {
-            type: String,
-            enum: ['Point'],
-        },
-        coordinates: [Number]
-    },
+    // location: {
+    //     type: {
+    //         type: String,
+    //         enum: ['Point'],
+    //     },
+    //     coordinates: [Number]
+    // },
     customResponses: [
         {
             fieldName: { type: String, required: true },
             response: { type: String, required: true },
-            _id: false,
+            _id: false        
         }
     ]
-});
+  }
+);
 
 const sessionSchema = new Schema({
     sessionNo: { type: String, required: true, unique: true }, 
