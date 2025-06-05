@@ -42,6 +42,7 @@ export function useUserActions() {
         const res = await fetch(`/api/user/${userId}?sessionNo=${sessionNo}`);
         const text = await res.text();
         if (!res.ok) {
+            if (res.status === 404) return null;
             console.error("api returned error:", res.status, text);
             throw new Error(`Failed to fetch user: ${text}`);
         }
@@ -53,7 +54,7 @@ export function useUserActions() {
         if (!data.success) throw new Error(data.error || "Failed to fetch user");
         return data.user;
     }
-    
+
     const updateUser = async (sessionNo: string, userId: string, userData: any) => {
         try {
             const res = await fetch(`/api/user/${userId}?sessionNo=${sessionNo}`, {

@@ -66,7 +66,7 @@ export default function EditSession() {
 
         if (sessionNo) fetchMap();
     }, [sessionNo, router])
-    console.log(mapDoc);
+    // console.log(mapDoc);
     
     const { fetchUsers } = useUserActions();
     

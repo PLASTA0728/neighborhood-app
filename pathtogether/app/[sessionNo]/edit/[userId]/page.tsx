@@ -8,7 +8,6 @@ import { Button } from "@/ui/button"
 import { useParams, useRouter } from 'next/navigation'
 import { cousine } from '@/ui/fonts'
 import FormInput from '@/components/FormInput'
-import { saveUser } from '@/utils/saveUser'
 import CustomFieldList from '@/components/CustomFieldList'
 import type { IUser } from '@/lib/models/Session'
 import { useUserActions } from '@/hooks/useUserActions'
@@ -22,7 +21,6 @@ export default function EditUserPage() {
     const router = useRouter();
     const [mapDoc, setMapDoc] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [userData, setUserData] = useState<IUser | null>(null);
 
     const [enabled, setEnabled] = useState(false);
 
@@ -31,24 +29,27 @@ export default function EditUserPage() {
     const [age, setAge] = useState("");
     const [contact, setContact] = useState("");
     const [role, setRole] = useState("");
-
+    const [customResponses, setCustomResponses] = useState<CustomResponse[]>([]);
     useEffect(() => {
         const getUserData = async () => {
             setLoading(true);
             try {
                 const user = await fetchSingleUser(userId.toString(), sessionNo.toString());
-                if (user) {
-                    setUserData(user);
+                if (!user) {
+                    console.error("User not found");
+                    router.push('/not-found');
+                } else {
                     setName(user.name || "");
                     setAge(user.age || "");
                     setContact(user.contact || "");
                     setRole(user.role || "");
+                    setCustomResponses(user.customResponses || []);
+                    await new Promise(r => setTimeout(r, 300));
+                    setLoading(false);
                 }
             } catch (err) {
                 console.error("Failed to fetch user data:", err);
-            } finally {
-                setLoading(false);
-            }            
+            }        
         };
         if (sessionNo && userId) getUserData();
     }, [sessionNo, userId]);
@@ -57,8 +58,6 @@ export default function EditUserPage() {
         fieldName: string;
         response: string;
     }
-    // for auto generate custom fields 
-    const [customResponses, setCustomResponses] = useState<CustomResponse[]>([]);
     // for the user cards
     const [users, setUsers] = useState<IUser[]>([]);
 
@@ -97,7 +96,7 @@ export default function EditUserPage() {
         };
         if (sessionNo) fetchMap();
     }, [sessionNo, router])
-    console.log(mapDoc);
+    // console.log(mapDoc);
     
     const { fetchUsers } = useUserActions();
     
@@ -123,7 +122,7 @@ export default function EditUserPage() {
         <div className='flex flex-col sm:flex-row min-h-screen w-full'>
             <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 relative">
                 <div className='text-2xl text-center'>
-                you are now editing <span className='text-emerald-400'>someone</span>'s info on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map!
+                you are now editing <span className='text-emerald-400'>{name}</span>&apos;s info on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map
                 </div>
                 <div className={`${cousine.className} text-gray-600 text-sm text-center mb-2`}> 
                     session code: {mapDoc?.sessionNo}
