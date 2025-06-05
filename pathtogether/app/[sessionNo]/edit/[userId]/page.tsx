@@ -189,7 +189,7 @@ export default function EditUserPage() {
                         }
                     }}
                 >
-                    push my change
+                    push my changes
                 </Button>
                 </div>
             </div>
