@@ -1,12 +1,18 @@
 import type { IUser } from "@/lib/models/Session";
+import { useUserActions } from "@/hooks/useUserActions";
+import Link from "next/link";
 
 type Props = {
+    sessionNo: string;
     user: IUser;
+    refreshUsers: () => void;
 };
 
-export default function Card({ user }: Props) {
+export default function Card({ sessionNo, user, refreshUsers }: Props) {
+    const { deleteUser } = useUserActions();
+
     return (
-        <div className="border rounded-xl p-4 shadow bg-gray-200 min-w-[250px] min-h-[150px]">
+        <div className="relative border rounded-xl p-4 shadow bg-gray-200 min-w-[250px] min-h-[150px]">
             <h2 className="font-bold text-lg text-black">{user.name}</h2>
 
             {Object.entries(user).map(([key, value]) => {
@@ -24,6 +30,20 @@ export default function Card({ user }: Props) {
                     {res.fieldName}: {res.response}
                     </p>
                 ))}
+            <div className="absolute grid-cols-2 grid top-1 right-2">
+                <Link href={`/${sessionNo}/edit/${user._id}`} className="text-gray-700 hover:underline">edit</Link>
+                <div className="text-red-500 hover:underline focus:text-red-800" 
+                    onClick={async () => {
+                        try {
+                            await deleteUser(user._id.toString(), sessionNo);
+                            await refreshUsers();
+                        } catch (e) {
+                            alert("something broke :( " + e.message);
+                        }
+                }}>
+                    delete
+                </div>
+            </div>
         </div>
     );
 }

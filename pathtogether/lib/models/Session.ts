@@ -1,4 +1,4 @@
-import { Schema, model, models, Model } from 'mongoose';
+import { Schema, model, models, Model, ObjectId } from 'mongoose';
 
 interface CustomResponse {
   fieldName: string;
@@ -15,12 +15,11 @@ export interface IUser {
   //   coordinates: [number, number];
   // };
   customResponses: CustomResponse[];
+  _id: ObjectId;
 }
 
 interface ISession {
   sessionNo: string;
-  mapName?: string;
-  groupName?: string;
   users: IUser[];
 }
 
@@ -44,7 +43,7 @@ const userSchema = new Schema<IUser>(
             response: { type: String, required: true },
             _id: false        
         }
-    ]
+    ],
   }
 );
 

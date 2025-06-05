@@ -15,11 +15,15 @@ import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
 
 
-export default function EditSession() {
-    const { sessionNo } = useParams();
+export default function EditUserPage() {
+    const { sessionNo, userId } = useParams();
+    const { fetchSingleUser, updateUser } = useUserActions();
+
     const router = useRouter();
     const [mapDoc, setMapDoc] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState<IUser | null>(null);
+
     const [enabled, setEnabled] = useState(false);
 
     // for the change value of the custom fields
@@ -27,6 +31,27 @@ export default function EditSession() {
     const [age, setAge] = useState("");
     const [contact, setContact] = useState("");
     const [role, setRole] = useState("");
+
+    useEffect(() => {
+        const getUserData = async () => {
+            setLoading(true);
+            try {
+                const user = await fetchSingleUser(userId.toString(), sessionNo.toString());
+                if (user) {
+                    setUserData(user);
+                    setName(user.name || "");
+                    setAge(user.age || "");
+                    setContact(user.contact || "");
+                    setRole(user.role || "");
+                }
+            } catch (err) {
+                console.error("Failed to fetch user data:", err);
+            } finally {
+                setLoading(false);
+            }            
+        };
+        if (sessionNo && userId) getUserData();
+    }, [sessionNo, userId]);
     
     type CustomResponse = {
         fieldName: string;
@@ -53,17 +78,23 @@ export default function EditSession() {
     useEffect(() => {
         const fetchMap = async() => {
             setLoading(true);
-            const res = await fetch(`/api/map/get?sessionNo=${sessionNo}`);
-            const data = await res.json();
+            try {
+                const res = await fetch(`/api/map/get?sessionNo=${sessionNo}`);
+                const data = await res.json();
 
-            if (!data.success || !data.map) {
+                if (!data.success || !data.map) {
+                    router.push('/not-found');
+                } else {
+                    setMapDoc(data.map);
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error("failed to fetch map data:", error);
                 router.push('/not-found');
-            } else {
-                setMapDoc(data.map);
+            } finally {
                 setLoading(false);
             }
         };
-
         if (sessionNo) fetchMap();
     }, [sessionNo, router])
     console.log(mapDoc);
@@ -74,6 +105,7 @@ export default function EditSession() {
         const data = await fetchUsers(sessionNo.toString());
         if (data) setUsers(data);
     }, [fetchUsers, sessionNo]);
+    
     useEffect(() => {
         const loadUsers = async () => {
             const data = await fetchUsers(sessionNo.toString());
@@ -91,10 +123,12 @@ export default function EditSession() {
         <div className='flex flex-col sm:flex-row min-h-screen w-full'>
             <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 relative">
                 <div className='text-2xl text-center'>
-                take me on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map for <span className='text-emerald-400'>{mapDoc?.groupName}</span>!
+                you are now editing <span className='text-emerald-400'>someone</span>'s info on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map!
                 </div>
-                <div className={`${cousine.className} text-gray-600 text-sm text-center mb-2`}>
-                session code: {mapDoc?.sessionNo}
+                <div className={`${cousine.className} text-gray-600 text-sm text-center mb-2`}> 
+                    session code: {mapDoc?.sessionNo}
+                <br></br>
+                    user id: {userId} 
                 </div>
 
                 <div className="flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4">
@@ -140,7 +174,7 @@ export default function EditSession() {
                     type="submit"
                     onClick={async () => {
                         try {
-                            await saveUser(sessionNo.toString(), {
+                            await updateUser(sessionNo.toString(), userId.toString(), {
                                 name, 
                                 age,
                                 contact,
@@ -148,19 +182,19 @@ export default function EditSession() {
                                 customResponses
                             });
                             alert("user saved!");
-                            await new Promise(r => setTimeout(r, 300));
                             const data = await fetchUsers(sessionNo.toString());
                             if (data) setUsers(data);
                         } catch (e) {
-                            alert("something broke: " + e.message + " :( ");
+                            alert("something broke :( " + e.message);
                         }
                     }}
                 >
-                    pin myself on the map!
+                    push my change
                 </Button>
                 </div>
             </div>
             <Panel sessionNo={sessionNo.toString()} users={users} refreshUsers={refreshUsers}/>
+            
         </div>
     </main>
     )
