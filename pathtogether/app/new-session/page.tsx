@@ -8,8 +8,9 @@ import { useSessionManager } from "@/hooks/useSessionManager";
 import { getFieldsForTemplate } from '@/lib/getFieldsForTemplate'
 import FormInput from "@/components/FormInput";
 import Link from "next/link";
+import { SquareLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
 // import { generateUniqueSessionNo } from "@/app/lib/session-generator";
-
 
 export default function NewSession() {
   const { // hooks must be inside
@@ -20,6 +21,8 @@ export default function NewSession() {
     setHasUpdatedSession,
     shareSession,
   } = useSessionManager();
+
+  const router = useRouter();
 
   // database
   const [groupName, setGroupName ] = useState("");
@@ -34,6 +37,19 @@ export default function NewSession() {
 
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
   const [currentField, setCurrentField] = useState<CustomField>({ fieldName: "", fieldType: "string" });
+  const [isSaving, setIsSaving] = useState(false); // for the saving loading effect 
+  const [countdown, setCountdown] = useState<number | null>(null); // for the countdown before redirecting to edit page
+  const [countdownActive, setCountdownActive] = useState(false); // for the countdown before redirecting to edit page
+
+  const handleShareSession = async () => {
+    setIsSaving(true);
+    try {
+      await shareSession({ groupName, mapName, customFields });
+    } catch (error) {
+      alert("something broke: " + error.message);
+    }
+    setIsSaving(false);
+  }
 
   const addField = () => {
     if (currentField.fieldName.trim() === "") return;
@@ -55,9 +71,32 @@ export default function NewSession() {
     setCustomFields(fields);
   }, [template])
 
+  useEffect(() => {
+    if (showPopup) {
+      setCountdown(3);
+      setCountdownActive(true);
+    } else {
+      setCountdownActive(false);
+    }
+  }, [showPopup]);
+
+  useEffect(() => {
+    if (!countdownActive || countdown === null) return;
+    if (countdown === 0) {
+      router.push(`/${sessionNo}/edit`);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCountdown((prev) => (prev !== null ? prev - 1 : null));
+    }, 1000);
+
+    return () => clearTimeout(timer); 
+  }, [countdown, countdownActive, router, sessionNo])
+
   return (
     <main className="relative w-full h-screen">
-      <div className="flex flex-col sm:flex-row h-screen w-full">
+      <div className="flex flex-col sm:flex-row min-h-screen w-full">
         <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 flex flex-col relative">
           <div className="text-2xl text-center mb-4">create a new map!</div>
           <div className="flex flex-col">
@@ -117,37 +156,39 @@ export default function NewSession() {
             </div>
           )}
           <Button
-            className=" mt-6 sm:fixed sm:right-10 sm:bottom-10 z-30 self-center sm:self-auto "
-            onClick={() =>
-              shareSession({ groupName, mapName, customFields }).catch((e) =>
-                alert("something broke: " + e.message)
-              )
-            }
+            className="mt-6 sm:fixed sm:right-10 sm:bottom-8 z-30 self-center sm:self-auto "
+            onClick={handleShareSession}
+            disabled={isSaving}
           >
             share my session!
           </Button>
+          {isSaving && 
+            (<div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+              <SquareLoader color="oklch(70.4% 0.04 256.788)"/>
+            </div>
+          )}
         </div>
         <div className="flex-1 bg-gray-100 flex justify-center p-10">
           {/* You can later replace this with a real map component */}
           {/* <div className="text-gray-600 text-xl">walkthrough on how to create the map and promotion of different styles will be displayed here</div> */}
           <div className="relative text-gray-600 grid gap-2">
             <h2 className="text-gray-800 text-xl">to get started</h2>
-            <p>besides the <Link href="/" className="text-blue-400">landing page</Link>, there are two main pages: <Link href="/new-session">create new session</Link> & edit session (which you <span className="inline bold text-red-500">can't</span> get access to before having a session code).</p>
-            <p>you are currently on the <Link href="/new-session" className="text-blue-400">create session page</Link>. after you create a session, you can click on the "share my session" button below to get your session code on a pop-up. Your session code should be in the format of alphanumerical digits of length 8.</p>
+            <p>besides the <Link href="/" className="text-blue-400">landing page</Link>, there are two main pages: <Link href="/new-session">create new session</Link> & edit session (which you <span className="inline font-bold text-red-500">can&apos;t</span> get access to before having a session code).</p>
+            <p>you are currently on the <Link href="/new-session" className="text-blue-400">create session page</Link>. after you create a session, you can click on the &ldquo;share my session&rdquo; button below to get your session code on a pop-up. Your session code should be in the format of alphanumerical digits of length 8.</p>
             <p>after you get your session code, you can copy paste the session code to your friends. after they enter the session code in the input box on the landing page and press enter, they will be redirected to the edit page of your customized session to enter their information.</p>
             <h2 className="text-gray-800 text-xl">how to design a customized session?</h2>
             <p>after people enter the session code and get access to the session, they will see default basic entries including `name`, `age`, `contact`, `role`, and `location`; if you enter any customized fields on this create new session page, they will also be able to see the entries under the default entries.</p>
             <p>people may have different demands over what other entries they would like to add:</p>
             <p className="text-gray-500 italic text-center">i.e. for high school seniors that are about to graduate, they may want to add their `committed college` as one customized field. </p>
-            <p>you are allowed to control in which type should the answers be to avoid unhinged answers, for example, if you want others to enter their birthday, make them in the same format by selecting the `Date` type in the dropdown menu. click the <Plus className="inline size-4 relative bottom-0.5"/> button to confirm adding the field, and click the <Minus className="inline size-4 relative bottom-0.5 text-white bg-red-500 text-center rounded-full"/> to delete customized fields that you don't want to add anymore.</p>
-            <p>"templates" have been added as a way to quickly get access to some of the entries assumed to be used, and you can select them in the dropdown menu to see if any of which fits your need. it is also a good way to get a sense of what customized entries <span className="inline italic">you</span> want to implement!</p>
+            <p>you are allowed to control in which type should the answers be to avoid unhinged answers, for example, if you want others to enter their birthday, make them in the same format by selecting the `Date` type in the dropdown menu. click the <Plus className="inline size-4 relative bottom-0.5"/> button to confirm adding the field, and click the <Minus className="inline size-4 relative bottom-0.5 text-white bg-red-500 text-center rounded-full"/> to delete customized fields that you don&apos;t want to add anymore.</p>
+            <p>&ldquo;templates&rdquo; have been added as a way to quickly get access to some of the entries assumed to be used, and you can select them in the dropdown menu to see if any of which fits your need. it is also a good way to get a sense of what customized entries <span className="inline italic">you</span> want to implement!</p>
           </div>
         </div>
       </div>
       {showPopup && (
         <div className="fixed inset-0 z-40">
           <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-45 bg-white z-30 rounded-md text-gray-800 p-4">
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-50 bg-white z-30 rounded-md text-gray-800 p-4">
             { !hasUpdatedSession && (
               <div>
                 your session code has been generated successfully 🎉 you can share this with your friends to join the map.
@@ -161,6 +202,7 @@ export default function NewSession() {
             <div className="text-center text-2xl font-bold mt-2">
               {`session code: ${sessionNo}`}
             </div>
+            <div className="text-center bg-gray-300 p-2 rounded-md">redirect to the <Link href={`/${sessionNo}/edit`} className="text-blue-400" >edit session page</Link> in {countdown} second{countdown !== 1 && "s"}...</div>
           </div>
         </div>
       )}
