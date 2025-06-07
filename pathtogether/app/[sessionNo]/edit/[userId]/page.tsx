@@ -52,7 +52,7 @@ export default function EditUserPage() {
             }        
         };
         if (sessionNo && userId) getUserData();
-    }, [sessionNo, userId]);
+    }, [sessionNo, userId, fetchSingleUser, router]);
     
     type CustomResponse = {
         fieldName: string;
