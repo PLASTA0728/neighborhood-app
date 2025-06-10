@@ -19,6 +19,7 @@
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-google-autocomplete": "^2.7.5",
     "react-spinners": "^0.17.0",
     "zod": "^3.25.28"
   },

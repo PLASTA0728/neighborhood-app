@@ -13,6 +13,7 @@ import CustomFieldList from '@/components/CustomFieldList'
 import type { IUser } from '@/lib/models/Session'
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
+import LocationInput from '@/components/LocationInput'
 
 
 export default function EditSession() {
@@ -105,7 +106,7 @@ export default function EditSession() {
                 </div>
 
                 <div className='flex flex-col'>
-                <input className='px-4 py-4 rounded-md bg-white text-black' placeholder='my location' />
+                <LocationInput />
                 </div>
 
                 <div id="blurred-location" className='mt-4 flex justify-between'>
