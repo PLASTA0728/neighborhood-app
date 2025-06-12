@@ -14,6 +14,10 @@ import type { IUser } from '@/lib/models/Session'
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
 import LocationInput from '@/components/LocationInput'
+import LocationInputBeta from '@/components/LocationInputBeta'
+import AutocompleteMapField from '@/components/AutocompleteMapField'
+import PlaceSearchInput from '@/components/LocationInputGamma'
+import PlaceTextArea from '@/components/LocationInputGamma'
 
 
 export default function EditSession() {
@@ -107,6 +111,9 @@ export default function EditSession() {
 
                 <div className='flex flex-col'>
                 <LocationInput />
+                <LocationInputBeta />
+                <AutocompleteMapField />
+                <PlaceTextArea />
                 </div>
 
                 <div id="blurred-location" className='mt-4 flex justify-between'>
