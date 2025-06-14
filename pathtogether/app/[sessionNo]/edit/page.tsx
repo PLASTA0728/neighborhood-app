@@ -70,6 +70,7 @@ export default function EditSession() {
         const data = await fetchUsers(sessionNo.toString());
         if (data) setUsers(data);
     }, [fetchUsers, sessionNo]);
+    
     useEffect(() => {
         const loadUsers = async () => {
             const data = await fetchUsers(sessionNo.toString());

@@ -28,6 +28,7 @@ export default function EditUserPage() {
     const [contact, setContact] = useState("");
     const [role, setRole] = useState("");
     const [customResponses, setCustomResponses] = useState<ICustomResponse[]>([]);
+    const [location, setLocation] = useState<ILocation | null>(null);
     useEffect(() => {
         const getUserData = async () => {
             setLoading(true);
@@ -42,7 +43,7 @@ export default function EditUserPage() {
                     setContact(user.contact || "");
                     setRole(user.role || "");
                     setCustomResponses(user.customResponses || []);
-                    setLocation(user.location.displayName || "");
+                    // setLocation(user.location || null);
                     await new Promise(r => setTimeout(r, 300));
                     setLoading(false);
                 }
@@ -51,11 +52,10 @@ export default function EditUserPage() {
             }        
         };
         if (sessionNo && userId) getUserData();
-    }, [sessionNo, userId, fetchSingleUser, router]);
+    }, [sessionNo, userId, fetchSingleUser, router, location]);
     
     // for the user cards
     const [users, setUsers] = useState<IUser[]>([]);
-    const [location, setLocation] = useState<ILocation | null>(null);
 
     const handleCustomChange = (fieldName: string, value: string) => {
         setCustomResponses(prev => {

@@ -56,8 +56,6 @@ export async function DELETE(req: NextRequest, props: { params: Promise<{ id: st
 }
 
 
-
-
 export async function PUT(req: NextRequest, props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     await connectMongo();
@@ -79,6 +77,7 @@ export async function PUT(req: NextRequest, props: { params: Promise<{ id: strin
                     "users.$.contact": newUserData.contact,
                     "users.$.role": newUserData.role,
                     "users.$.customResponses": newUserData.customResponses,
+                    "users.$.location": newUserData.location,
                 }
             }
         );
