@@ -1,20 +1,71 @@
-import { usePlacesWidget } from "react-google-autocomplete";
+'use client';
 
-const LocationInput = () => {
-    console.log("MAP API KEY:", process.env.NEXT_PUBLIC_MAP_API_KEY);
-    const { ref } = usePlacesWidget({
-        apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY,
-        onPlaceSelected: (place) => {
-            console.log("Selected place:", place)
-        },
-        options: {
-            types: ["geocode"],
-        },
-    });
+import { useEffect, useRef } from 'react';
 
-    return (
-        <input ref={ref} className="px-4 py-4 rounded-md bg-white text-black" placeholder="search for a place" />
-    );
+type Props = {
+  onPlaceSelect?: (place: google.maps.places.PlaceResult) => void;
+  className?: string;
 };
 
-export default LocationInput;
+export default function LocationInput({
+  onPlaceSelect,
+  className = '',
+}: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+  if (!window?.google || !window?.google.maps?.importLibrary) return;
+
+  const loadAutocomplete = async () => {
+    //@ts-expect-error placeAutocompleteElement does not exist on type
+    const [{ PlaceAutocompleteElement }] = await Promise.all([
+      google.maps.importLibrary('places'),
+    ]);
+
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+    }
+    const autocomplete = new PlaceAutocompleteElement();
+
+    autocomplete.id = 'place-autocomplete-textarea';
+    autocomplete.setAttribute('placeholder', 'Search for a place...');
+    autocomplete.setAttribute('style', 'width: 100%; height: auto;');
+
+    console.log('setting up autocomplete')
+
+    autocomplete.addEventListener('gmp-select', async (event: CustomEvent) => {
+      const placePrediction = event.detail.placePrediction;
+      if (!placePrediction) return;
+      
+      const place = placePrediction.toPlace();
+      await place.fetchFields({
+        fields: ['displayName', 'formattedAddress', 'location'],
+      });
+
+      const placeData = place.toJSON();
+      console.log("selected place: ", placeData);
+
+      if (onPlaceSelect) onPlaceSelect(placeData);
+    });
+    // autocomplete.addEventListener('gmp-placechange', async () => {
+    //   const place = await autocomplete.getPlace?.();
+    //   if (place && onPlaceSelect) {
+    //     onPlaceSelect(place);
+    //   }
+    // });
+    containerRef.current?.appendChild(autocomplete);
+  };
+
+  loadAutocomplete();
+}, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`rounded-md bg-white ${className}`}
+    >
+      <p className="mb-2 font-semibold text-gray-700">Search for a place:</p>
+      {/* Autocomplete Web Component will be injected here */}
+    </div>
+  );
+}
