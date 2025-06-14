@@ -1,4 +1,4 @@
-import type { IUser } from "@/lib/models/Session";
+import type { IUser } from '@/utils/types';
 import { useUserActions } from "@/hooks/useUserActions";
 import Link from "next/link";
 

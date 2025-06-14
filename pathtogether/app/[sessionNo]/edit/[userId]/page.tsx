@@ -1,7 +1,4 @@
 'use client'
-// import { Select } from "@headlessui/react";
-// import clsx from "clsx";
-// import { Fragment } from 'react'
 import { Switch } from '@headlessui/react'
 import { useEffect, useState, useCallback } from 'react'
 import { Button } from "@/ui/button"
@@ -9,9 +6,10 @@ import { useParams, useRouter } from 'next/navigation'
 import { cousine } from '@/ui/fonts'
 import FormInput from '@/components/FormInput'
 import CustomFieldList from '@/components/CustomFieldList'
-import type { IUser } from '@/lib/models/Session'
+import type { IUser, ILocation, ICustomResponse } from '@/utils/types';
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
+import LocationInput from '@/components/LocationInput'
 
 
 export default function EditUserPage() {
@@ -29,7 +27,7 @@ export default function EditUserPage() {
     const [age, setAge] = useState("");
     const [contact, setContact] = useState("");
     const [role, setRole] = useState("");
-    const [customResponses, setCustomResponses] = useState<CustomResponse[]>([]);
+    const [customResponses, setCustomResponses] = useState<ICustomResponse[]>([]);
     useEffect(() => {
         const getUserData = async () => {
             setLoading(true);
@@ -44,6 +42,7 @@ export default function EditUserPage() {
                     setContact(user.contact || "");
                     setRole(user.role || "");
                     setCustomResponses(user.customResponses || []);
+                    setLocation(user.location.displayName || "");
                     await new Promise(r => setTimeout(r, 300));
                     setLoading(false);
                 }
@@ -54,12 +53,9 @@ export default function EditUserPage() {
         if (sessionNo && userId) getUserData();
     }, [sessionNo, userId, fetchSingleUser, router]);
     
-    type CustomResponse = {
-        fieldName: string;
-        response: string;
-    }
     // for the user cards
     const [users, setUsers] = useState<IUser[]>([]);
+    const [location, setLocation] = useState<ILocation | null>(null);
 
     const handleCustomChange = (fieldName: string, value: string) => {
         setCustomResponses(prev => {
@@ -138,7 +134,7 @@ export default function EditUserPage() {
                 </div>
 
                 <div className='flex flex-col'>
-                <input className='px-4 py-4 rounded-md bg-white text-black' placeholder='my location' />
+                <LocationInput onPlaceSelect={(location) => setLocation(location)} />
                 </div>
 
                 <div id="blurred-location" className='mt-4 flex justify-between'>

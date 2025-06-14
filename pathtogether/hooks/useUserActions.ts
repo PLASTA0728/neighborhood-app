@@ -1,4 +1,3 @@
-import { RollerCoaster } from "lucide-react";
 import { useCallback } from "react";
 
 export function useUserActions() {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import type { ILocation } from '@/lib/models/Session';
+import type { ILocation } from '@/utils/types';
 
 type Props = {
   onPlaceSelect?: (place: ILocation) => void;

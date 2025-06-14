@@ -1,7 +1,4 @@
-type CustomResponse = {
-    fieldName: string;
-    response: string;
-}
+import type { ICustomResponse } from "./types";
 
 export async function saveUser(
     sessionNo: string,
@@ -15,7 +12,7 @@ export async function saveUser(
             coordinates: [number, number];
             displayName: string;
         };
-        customResponses: CustomResponse[];
+        customResponses: ICustomResponse[];
     }
 ) {
     const fullPayload = { ...payload, sessionNo };

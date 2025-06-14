@@ -1,27 +1,5 @@
-import { Schema, model, models, Model, ObjectId } from 'mongoose';
-
-interface ICustomResponse {
-  fieldName: string;
-  response: string;
-}
-
-export interface ILocation {
-  type: 'Point';
-  id: string;
-  coordinates: [number, number];
-  displayName: string;
-}
-
-
-export interface IUser {
-  name: string;
-  age: string;
-  contact: string;
-  role: string;
-  location?: ILocation;
-  customResponses: ICustomResponse[];
-  _id: ObjectId;
-}
+import { Schema, model, models, Model } from 'mongoose';
+import type { IUser } from '@/utils/types';
 
 interface ISession {
   sessionNo: string;

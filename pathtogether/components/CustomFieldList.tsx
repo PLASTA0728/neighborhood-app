@@ -1,17 +1,13 @@
 import FormInput from "./FormInput";
+import { ICustomResponse } from '@/utils/types';
 
 type CustomField = {
     fieldName: string;
 };
 
-type CustomResponse = {
-    fieldName: string;
-    response: string;
-};
-
 type Props = {
     fields: CustomField[];
-    responses: CustomResponse[];
+    responses: ICustomResponse[];
     onChange: (fieldName: string, value: string) => void;
 };
 

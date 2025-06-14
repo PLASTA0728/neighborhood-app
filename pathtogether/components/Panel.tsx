@@ -3,7 +3,7 @@
 
 import { Button } from '@/ui/button';
 import Card from './Card';
-import type { IUser } from '@/lib/models/Session';
+import type { IUser } from '@/utils/types';
 
 type Props = {
     sessionNo: string;

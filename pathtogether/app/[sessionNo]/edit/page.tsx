@@ -7,7 +7,7 @@ import { cousine } from '@/ui/fonts'
 import FormInput from '@/components/FormInput'
 import { saveUser } from '@/utils/saveUser'
 import CustomFieldList from '@/components/CustomFieldList'
-import type { IUser, ILocation } from '@/lib/models/Session'
+import type { IUser, ILocation, ICustomResponse } from '@/utils/types'
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
 import LocationInput from '@/components/LocationInput'
@@ -25,13 +25,9 @@ export default function EditSession() {
     const [age, setAge] = useState("");
     const [contact, setContact] = useState("");
     const [role, setRole] = useState("");
-    
-    type CustomResponse = {
-        fieldName: string;
-        response: string;
-    }
+
     // for auto generate custom fields 
-    const [customResponses, setCustomResponses] = useState<CustomResponse[]>([]);
+    const [customResponses, setCustomResponses] = useState<ICustomResponse[]>([]);
     // for the user cards
     const [users, setUsers] = useState<IUser[]>([]);
     // for location
