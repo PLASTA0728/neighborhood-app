@@ -4,13 +4,14 @@ import SessionModel from "@/lib/models/Session";
 
 export async function POST(req: NextRequest) {
     await connectMongo();
-    const { sessionNo, name, age, contact, role, customResponses } = await req.json();
+    const { sessionNo, name, age, contact, role, location, customResponses } = await req.json();
 
     const newUser = {
         name,
         age, 
         contact,
         role,
+        location,
         customResponses,
     };
 

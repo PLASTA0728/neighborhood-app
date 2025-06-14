@@ -14,7 +14,7 @@ export default function Card({ sessionNo, user, refreshUsers }: Props) {
     return (
         <div className="relative border rounded-xl p-4 shadow bg-gray-200 min-w-[250px] min-h-[150px]">
             <h2 className="font-bold text-lg text-black">{user.name}</h2>
-
+            <div>
             {Object.entries(user).map(([key, value]) => {
                 if (key === "name" || key === "customResponses" || key === "_id" || typeof value === "object") return null;
                     return (
@@ -24,12 +24,15 @@ export default function Card({ sessionNo, user, refreshUsers }: Props) {
                         </p>
                     );
                 })}
-
-                    {user.customResponses?.map((res, index) => (
+                {user.customResponses?.map((res, index) => ( // custom responses
                     <p key={`custom-${index}`} className="text-sm text-gray-600">
                     {res.fieldName}: {res.response}
                     </p>
                 ))}
+                {user.location && user.location.displayName && ( // location
+                    <p className="text-sm text-gray-600">location: {user.location.displayName}</p>
+                )}
+            </div>
             <div className="absolute grid-cols-2 grid top-1 right-2">
                 <Link href={`/${sessionNo}/edit/${user._id}`} className="text-gray-700 hover:underline">edit</Link>
                 <div className="text-red-500 hover:underline focus:text-red-800" 

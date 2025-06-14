@@ -1,20 +1,25 @@
 import { Schema, model, models, Model, ObjectId } from 'mongoose';
 
-interface CustomResponse {
+interface ICustomResponse {
   fieldName: string;
   response: string;
 }
+
+export interface ILocation {
+  type: 'Point';
+  id: string;
+  coordinates: [number, number];
+  displayName: string;
+}
+
 
 export interface IUser {
   name: string;
   age: string;
   contact: string;
   role: string;
-  // location?: {
-  //   type: 'Point';
-  //   coordinates: [number, number];
-  // };
-  customResponses: CustomResponse[];
+  location?: ILocation;
+  customResponses: ICustomResponse[];
   _id: ObjectId;
 }
 
@@ -30,13 +35,28 @@ const userSchema = new Schema<IUser>(
     age: {type: String, required: true },
     contact: {type: String, required: true },
     role: {type: String, required: true },
-    // location: {
-    //     type: {
-    //         type: String,
-    //         enum: ['Point'],
-    //     },
-    //     coordinates: [Number]
-    // },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        id: {
+          type: String,
+          required: true
+        },
+        coordinates: {
+          type: [Number], 
+          validate: {
+            validator: (val: number[]) => val.length === 2,
+            message: 'coordinates must be [lat, lng]'
+          }
+        },
+        displayName: {
+          type: String,
+          required: true
+        }
+    },
     customResponses: [
         {
             fieldName: { type: String, required: true },

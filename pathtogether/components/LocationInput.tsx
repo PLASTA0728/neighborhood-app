@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type { ILocation } from '@/lib/models/Session';
 
 type Props = {
-  onPlaceSelect?: (place: google.maps.places.PlaceResult) => void;
+  onPlaceSelect?: (place: ILocation) => void;
   className?: string;
 };
 
 export default function LocationInput({
-  onPlaceSelect,
+  onPlaceSelect, 
   className = '',
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,29 +34,32 @@ export default function LocationInput({
 
     console.log('setting up autocomplete')
 
-    autocomplete.addEventListener('gmp-select', async (event: CustomEvent) => {
-      const placePrediction = event.detail.placePrediction;
+    autocomplete.addEventListener('gmp-select', async ({ placePrediction }) => {
       if (!placePrediction) return;
       
       const place = placePrediction.toPlace();
       await place.fetchFields({
-        fields: ['displayName', 'formattedAddress', 'location'],
+        fields: ['id', 'displayName', 'formattedAddress', 'location'],
       });
 
       const placeData = place.toJSON();
       console.log("selected place: ", placeData);
 
-      if (onPlaceSelect) onPlaceSelect(placeData);
+      // if (onPlaceSelect) onPlaceSelect(placeData);
+      if (onPlaceSelect && placeData?.location?.lat !== undefined && placeData?.location?.lng !== undefined) {
+        const mappedLocation: ILocation = {
+          type: "Point",
+          id: placeData.id,
+          coordinates: [placeData.location.lng, placeData.location.lat], // order which geoJSON uses
+          displayName: placeData.displayName || placeData.formattedAddress || 'Unknown Location',
+        };
+
+        onPlaceSelect(mappedLocation);
+        console.log("send to db:", mappedLocation);
+      } 
     });
-    // autocomplete.addEventListener('gmp-placechange', async () => {
-    //   const place = await autocomplete.getPlace?.();
-    //   if (place && onPlaceSelect) {
-    //     onPlaceSelect(place);
-    //   }
-    // });
     containerRef.current?.appendChild(autocomplete);
   };
-
   loadAutocomplete();
 }, []);
 

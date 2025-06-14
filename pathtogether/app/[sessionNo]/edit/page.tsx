@@ -1,7 +1,4 @@
 'use client'
-// import { Select } from "@headlessui/react";
-// import clsx from "clsx";
-// import { Fragment } from 'react'
 import { Switch } from '@headlessui/react'
 import { useEffect, useState, useCallback } from 'react'
 import { Button } from "@/ui/button"
@@ -10,7 +7,7 @@ import { cousine } from '@/ui/fonts'
 import FormInput from '@/components/FormInput'
 import { saveUser } from '@/utils/saveUser'
 import CustomFieldList from '@/components/CustomFieldList'
-import type { IUser } from '@/lib/models/Session'
+import type { IUser, ILocation } from '@/lib/models/Session'
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
 import LocationInput from '@/components/LocationInput'
@@ -37,6 +34,8 @@ export default function EditSession() {
     const [customResponses, setCustomResponses] = useState<CustomResponse[]>([]);
     // for the user cards
     const [users, setUsers] = useState<IUser[]>([]);
+    // for location
+    const [location, setLocation] = useState<ILocation | null>(null);
 
     const handleCustomChange = (fieldName: string, value: string) => {
         setCustomResponses(prev => {
@@ -106,7 +105,7 @@ export default function EditSession() {
                 </div>
 
                 <div className='flex flex-col'>
-                <LocationInput />
+                <LocationInput onPlaceSelect={(location) => setLocation(location)} />
                 </div>
 
                 <div id="blurred-location" className='mt-4 flex justify-between'>
@@ -146,6 +145,7 @@ export default function EditSession() {
                                 age,
                                 contact,
                                 role, 
+                                location,
                                 customResponses
                             });
                             alert("user saved!");

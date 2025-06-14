@@ -10,6 +10,11 @@ export async function saveUser(
         age: string;
         contact: string;
         role: string;
+        location?: {
+            id: string;
+            coordinates: [number, number];
+            displayName: string;
+        };
         customResponses: CustomResponse[];
     }
 ) {
