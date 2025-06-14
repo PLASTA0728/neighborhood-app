@@ -10,53 +10,52 @@ import type { IUser, ILocation, ICustomResponse } from '@/utils/types';
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
 import LocationInput from '@/components/LocationInput'
+import { SquareLoader } from 'react-spinners'
+import { useUserFormData } from '@/hooks/useUserFormData'
 
 
 export default function EditUserPage() {
     const { sessionNo, userId } = useParams();
-    const { fetchSingleUser, updateUser } = useUserActions();
-
     const router = useRouter();
+    const { updateUser, fetchUsers } = useUserActions();
     const [mapDoc, setMapDoc] = useState(null);
-    const [loading, setLoading] = useState(true);
-
+    const [users, setUsers] = useState<IUser[]>([]);
     const [enabled, setEnabled] = useState(false);
-
-    // for the change value of the custom fields
-    const [name, setName] = useState("");
-    const [age, setAge] = useState("");
-    const [contact, setContact] = useState("");
-    const [role, setRole] = useState("");
-    const [customResponses, setCustomResponses] = useState<ICustomResponse[]>([]);
-    const [location, setLocation] = useState<ILocation | null>(null);
+    
+    const {
+        loading,
+        name, setName, 
+        age, setAge,
+        contact, setContact,
+        role, setRole,
+        location, setLocation,
+        customResponses, setCustomResponses
+    } = useUserFormData(sessionNo.toString(), userId.toString());
+    
+    const refreshUsers = useCallback(async () => {
+        const data = await fetchUsers(sessionNo.toString());
+        if (data) setUsers(data);
+    }, [fetchUsers, sessionNo]);
+    
     useEffect(() => {
-        const getUserData = async () => {
-            setLoading(true);
+        const fetchMap = async() => {
             try {
-                const user = await fetchSingleUser(userId.toString(), sessionNo.toString());
-                if (!user) {
-                    console.error("User not found");
+                const res = await fetch(`/api/map/get?sessionNo=${sessionNo}`);
+                const data = await res.json();
+
+                if (!data.success || !data.map) {
                     router.push('/not-found');
                 } else {
-                    setName(user.name || "");
-                    setAge(user.age || "");
-                    setContact(user.contact || "");
-                    setRole(user.role || "");
-                    setCustomResponses(user.customResponses || []);
-                    // setLocation(user.location || null);
-                    await new Promise(r => setTimeout(r, 300));
-                    setLoading(false);
+                    setMapDoc(data.map);
                 }
-            } catch (err) {
-                console.error("Failed to fetch user data:", err);
-            }        
+            } catch (error) {
+                console.error("failed to fetch map data:", error);
+                router.push('/not-found');
+            }
         };
-        if (sessionNo && userId) getUserData();
-    }, [sessionNo, userId, fetchSingleUser, router, location]);
+        if (sessionNo) fetchMap();
+    }, [sessionNo, router]);
     
-    // for the user cards
-    const [users, setUsers] = useState<IUser[]>([]);
-
     const handleCustomChange = (fieldName: string, value: string) => {
         setCustomResponses(prev => {
             const existing = prev.find(r => r.fieldName === fieldName);
@@ -70,48 +69,14 @@ export default function EditUserPage() {
         });
     };
 
-    useEffect(() => {
-        const fetchMap = async() => {
-            setLoading(true);
-            try {
-                const res = await fetch(`/api/map/get?sessionNo=${sessionNo}`);
-                const data = await res.json();
-
-                if (!data.success || !data.map) {
-                    router.push('/not-found');
-                } else {
-                    setMapDoc(data.map);
-                    setLoading(false);
-                }
-            } catch (error) {
-                console.error("failed to fetch map data:", error);
-                router.push('/not-found');
-            } finally {
-                setLoading(false);
-            }
-        };
-        if (sessionNo) fetchMap();
-    }, [sessionNo, router])
-    // console.log(mapDoc);
-    
-    const { fetchUsers } = useUserActions();
-    
-    const refreshUsers = useCallback(async () => {
-        const data = await fetchUsers(sessionNo.toString());
-        if (data) setUsers(data);
-    }, [fetchUsers, sessionNo]);
-    
-    useEffect(() => {
-        const loadUsers = async () => {
-            const data = await fetchUsers(sessionNo.toString());
-            if (data) setUsers(data);
-        }
-        loadUsers();
-    }, [fetchUsers, sessionNo]);
-
-
-
-    if (loading) return <p>Loading map...</p>;
+    if (loading) return (
+        <div>
+            <div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+              <SquareLoader color="#94a3b8"/>
+              <p className='text-sm'>loading...</p>
+            </div>
+        </div>
+    )
 
     return (
     <main className="relative w-full">
@@ -174,9 +139,10 @@ export default function EditUserPage() {
                                 age,
                                 contact,
                                 role, 
-                                customResponses
+                                location,
+                                customResponses, 
                             });
-                            alert("user saved!");
+                            alert("user updated!");
                             const data = await fetchUsers(sessionNo.toString());
                             if (data) setUsers(data);
                         } catch (e) {

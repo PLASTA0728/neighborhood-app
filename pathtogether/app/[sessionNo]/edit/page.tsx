@@ -11,6 +11,7 @@ import type { IUser, ILocation, ICustomResponse } from '@/utils/types'
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
 import LocationInput from '@/components/LocationInput'
+import { SquareLoader } from 'react-spinners'
 
 
 export default function EditSession() {
@@ -81,7 +82,14 @@ export default function EditSession() {
 
 
 
-    if (loading) return <p>Loading map...</p>;
+    if (loading) return (
+        <div>
+            <div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+              <SquareLoader color="#94a3b8"/>
+              <p className='text-sm'>loading...</p>
+            </div>
+        </div>
+    )
 
     return (
     <main className="relative w-full">
