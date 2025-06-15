@@ -1,17 +1,6 @@
 import mongoose, { Schema, Model, models, model, Document } from 'mongoose';
-
-export interface ICustomField {
-    fieldName?: string;
-    fieldType?: string;
-}
-
-export interface IMap extends Document {
-    groupName: string;
-    mapName: string;
-    sessionNo: string;
-    // template?: string;
-    customFields?: ICustomField[];
-}
+import type { ICustomField, IMap } from "@/utils/types"
+import z from 'zod';
 
 const customFieldSchema = new Schema<ICustomField>(
     {
@@ -30,11 +19,22 @@ const mapSchema = new mongoose.Schema<IMap>({
     sessionNo: { type: String, required: true, unique: true },
     customFields: [customFieldSchema],
 },
-{
-    timestamps: true,
-});
-
+);
 
 const MapModel: Model<IMap> = models.Map || model<IMap>('Map', mapSchema);
 
 export default MapModel;
+
+export const CustomFieldSchema = z.object({
+    fieldName: z.string(),
+    fieldType: z.enum(["string", "number", "boolean", "date"]),
+});
+
+export const MapSchema = z.object({
+    groupName: z.string().min(1, "group name is required"),
+    mapName: z.string().min(1,"map name is required"),
+    sessionNo: z.string(),
+    customFields: z.array(CustomFieldSchema).optional(),
+});
+
+export type MapInput = z.infer<typeof MapSchema>;

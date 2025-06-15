@@ -17,7 +17,19 @@ export interface IUser {
   age: string;
   contact: string;
   role: string;
-  location?: ILocation;
+  location: ILocation;
   customResponses: ICustomResponse[];
   _id: ObjectId;
+}
+
+export interface ICustomField {
+  fieldName?: string;
+  fieldType?: string;
+}
+
+export interface IMap {
+  groupName: string;
+  mapName: string;
+  sessionNo: string;
+  customFields?: ICustomField[];
 }
