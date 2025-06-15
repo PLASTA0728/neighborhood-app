@@ -3,6 +3,7 @@ import { ICustomResponse } from '@/utils/types';
 
 type CustomField = {
     fieldName: string;
+    value: string;
 };
 
 type Props = {

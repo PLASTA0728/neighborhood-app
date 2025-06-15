@@ -1,17 +1,14 @@
 'use client'
-import { Switch } from '@headlessui/react'
 import { useEffect, useState, useCallback } from 'react'
 import { Button } from "@/ui/button"
 import { useParams, useRouter } from 'next/navigation'
 import { cousine } from '@/ui/fonts'
-import FormInput from '@/components/FormInput'
 import { saveUser } from '@/utils/saveUser'
-import CustomFieldList from '@/components/CustomFieldList'
 import type { IUser, ILocation, ICustomResponse } from '@/utils/types'
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
-import LocationInput from '@/components/LocationInput'
 import { SquareLoader } from 'react-spinners'
+import FormFields from '@/components/UserFormFields'
 
 
 export default function EditSession() {
@@ -97,49 +94,28 @@ export default function EditSession() {
                 <div className={`${cousine.className} text-gray-600 text-sm text-center mb-2`}>
                 session code: {mapDoc?.sessionNo}
                 </div>
-
-                <div className="flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4">
-                <FormInput placeholder='my name' value={name} onChange={setName}/>
-                <FormInput placeholder='my age' value={age} onChange={setAge}/>
-                <FormInput placeholder='my contact' value={contact} onChange={setContact}/>
-                <FormInput placeholder='my role' value={role} onChange={setRole}/>
-                </div>
-
-                <div className='flex flex-col'>
-                <LocationInput onPlaceSelect={(location) => setLocation(location)}/>
-                </div>
-
-                <div id="blurred-location" className='mt-4 flex justify-between'>
-                <div>blurred location</div>
-                <div id='switch'>
-                    <Switch
-                    checked={enabled}
-                    onChange={setEnabled}
-                    className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-white/10 p-1 ease-in-out focus:not-data-focus:outline-none data-checked:bg-blue-600 data-focus:outline data-focus:outline-white"
-                    >
-                    <span
-                        aria-hidden="true"
-                        className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out group-data-checked:translate-x-7"
-                    />
-                    </Switch>
-                </div>
-                </div>
-
-                <div className='text-gray-400 text-sm mt-2'>
-                if you rather prefer share a relatively blurred location, we will handle this for you! this will neither be stored in our dataset.
-                </div>
-                {mapDoc?.customFields?.length > 0 && (
-                <>
-                <div className='text-xl mt-4 mb-2'>custom fields</div>
-                <CustomFieldList fields={mapDoc?.customFields || []} responses={customResponses} onChange={handleCustomChange} />
-                </>
-                )}
+                <FormFields name={name}
+                    setName={setName}
+                    age={age}
+                    setAge={setAge}
+                    contact={contact}
+                    setContact={setContact}
+                    role={role}
+                    setRole={setRole}
+                    setLocation={setLocation}
+                    enabled={enabled}
+                    setEnabled={setEnabled}
+                    mapDoc={mapDoc}
+                    customResponses={customResponses}
+                    handleCustomChange={handleCustomChange}
+                />
 
                 <div className='flex flex-col items-center'>
                 <Button
                     className="mt-4"
                     type="submit"
                     onClick={async () => {
+                        console.log("sending to db:", location);
                         try {
                             await saveUser(sessionNo.toString(), {
                                 name, 
