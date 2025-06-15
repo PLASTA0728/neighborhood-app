@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { Button } from "@/ui/button"
 import { useParams, useRouter } from 'next/navigation'
 import { cousine } from '@/ui/fonts'
-import type { IUser, ILocation, ICustomResponse } from '@/utils/types';
+import type { IUser } from '@/utils/types';
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
 import { SquareLoader } from 'react-spinners'

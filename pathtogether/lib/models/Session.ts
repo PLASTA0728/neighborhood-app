@@ -1,6 +1,5 @@
 import { Schema, model, models, Model } from 'mongoose';
 import type { ILocation, IUser } from '@/utils/types';
-import { z } from 'zod';
 
 interface ISession {
   sessionNo: string;
@@ -59,31 +58,3 @@ sessionSchema.index({ 'users.location': '2dsphere' });
 const SessionModel: Model<ISession> = models.Session || model<ISession>('Session', sessionSchema);
 
 export default SessionModel;
-
-
-// zod 
-
-export const LocationSchema = z.object({
-  type: z.literal("Point"),
-  id: z.string(),
-  coordinates: z.tuple([z.number(), z.number()]),
-  displayName: z.string(),
-});
-
-export const UserSchema = z.object({
-  name: z.string().min(1, "name is required"),
-  age: z.string().optional(),
-  contact: z.string().optional(),
-  role: z.string().optional(),
-  location: LocationSchema,
-  customResponses: z
-    .array(
-      z.object({
-        fieldName: z.string(),
-        response: z.string(),
-      })
-    )
-    .optional(),
-});
-
-export type UserInput = z.infer<typeof UserSchema>

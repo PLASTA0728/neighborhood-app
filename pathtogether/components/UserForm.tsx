@@ -1,5 +1,5 @@
 'use client' 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Switch } from "@headlessui/react"
 import FormInput from "./FormInput"
 import CustomFieldList from "./CustomFieldList"
@@ -24,7 +24,7 @@ type Props = {
     submitLabel: string
 }
 
-export default function UserForm({ mapDoc, initialUser, onSubmit, submitLabel }: Props) {
+export default function UserForm({ mapDoc, initialUser, onSubmit }: Props) {
     const [name, setName] = useState(initialUser?.name || "")
     const [age, setAge] = useState(initialUser?.age || "")
     const [contact, setContact] = useState(initialUser?.contact || "")

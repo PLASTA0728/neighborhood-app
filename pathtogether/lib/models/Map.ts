@@ -1,4 +1,4 @@
-import mongoose, { Schema, Model, models, model, Document } from 'mongoose';
+import mongoose, { Schema, Model, models, model } from 'mongoose';
 import type { ICustomField, IMap } from "@/utils/types"
 import z from 'zod';
 
