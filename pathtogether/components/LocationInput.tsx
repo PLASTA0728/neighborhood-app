@@ -31,12 +31,11 @@ export default function LocationInput({
     autocomplete.id = 'place-autocomplete-textarea';
     autocomplete.setAttribute('placeholder', 'Search for a place...');
     autocomplete.setAttribute('style', 'width: 100%; height: auto;');
-
+    
     console.log('setting up autocomplete')
 
     autocomplete.addEventListener('gmp-select', async ({ placePrediction }) => {
       if (!placePrediction) return;
-      
       const place = placePrediction.toPlace();
       await place.fetchFields({
         fields: ['id', 'displayName', 'formattedAddress', 'location'],

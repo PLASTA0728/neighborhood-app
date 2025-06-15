@@ -53,9 +53,16 @@ export default function EditUserPage() {
                 router.push('/not-found');
             }
         };
-        if (sessionNo) fetchMap();
-    }, [sessionNo, router]);
-    
+        if (sessionNo) {
+            fetchMap();
+            const loadUsers = async () => {
+                const data = await fetchUsers(sessionNo.toString());
+                if (data) setUsers(data);
+            }
+            loadUsers()
+        }
+    }, [sessionNo, router, fetchUsers]);
+
     const handleCustomChange = (fieldName: string, value: string) => {
         setCustomResponses(prev => {
             const existing = prev.find(r => r.fieldName === fieldName);

@@ -46,7 +46,8 @@ export default function EditSession() {
             }
         });
     };
-
+    const { fetchUsers } = useUserActions();
+    
     useEffect(() => {
         const fetchMap = async() => {
             setLoading(true);
@@ -61,26 +62,21 @@ export default function EditSession() {
             }
         };
 
-        if (sessionNo) fetchMap();
-    }, [sessionNo, router])
+        if (sessionNo) {
+            fetchMap();
+            const loadUsers = async () => {
+                const data = await fetchUsers(sessionNo.toString());
+                if (data) setUsers(data);
+            }
+            loadUsers();
+        }
+    }, [sessionNo, router, fetchUsers])
     // console.log(mapDoc);
-    
-    const { fetchUsers } = useUserActions();
     
     const refreshUsers = useCallback(async () => {
         const data = await fetchUsers(sessionNo.toString());
         if (data) setUsers(data);
     }, [fetchUsers, sessionNo]);
-    
-    useEffect(() => {
-        const loadUsers = async () => {
-            const data = await fetchUsers(sessionNo.toString());
-            if (data) setUsers(data);
-        }
-        loadUsers();
-    }, [fetchUsers, sessionNo]);
-
-
 
     if (loading) return (
         <div>
@@ -110,7 +106,7 @@ export default function EditSession() {
                 </div>
 
                 <div className='flex flex-col'>
-                <LocationInput onPlaceSelect={(location) => setLocation(location)} />
+                <LocationInput onPlaceSelect={(location) => setLocation(location)}/>
                 </div>
 
                 <div id="blurred-location" className='mt-4 flex justify-between'>
