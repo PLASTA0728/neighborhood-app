@@ -1,7 +1,7 @@
 import FormInput from "./FormInput"
 import { Plus, Minus } from "lucide-react"
 import { cousine } from "@/ui/fonts"
-import React, { useState } from "react"
+import React from "react"
 
 type Props = {
     groupName: string
@@ -15,8 +15,8 @@ type Props = {
     customFields: any
     removeField: (index: number) => void
     addField: () => void
-    errors: { groupName?: string; mapName?: string };
-    setErrors: React.Dispatch<React.SetStateAction<{ groupName?: string; mapName?: string }>>;
+    errors: { groupName?: string; mapName?: string; currentFieldName?: string; };
+    setErrors: React.Dispatch<React.SetStateAction<{ groupName?: string; mapName?: string; currentFieldName?: string; }>>;
 }
 
 export default function CreateFormFields({
@@ -82,10 +82,19 @@ export default function CreateFormFields({
             <option value="boolean">boolean</option>
             <option value="date">date</option>
           </select>
-          <button className="bg-gray-800 text-center rounded-full text-white" type="button" onClick={addField}>
+          <button 
+            className="bg-gray-800 text-center rounded-full text-white" 
+            type="button"
+            onClick={() => {
+              addField();
+              if (errors.currentFieldName) setErrors(prev => ({ ...prev, currentFieldName: undefined }));
+          }}>
             <Plus size={16} />
           </button>
         </div>
+        {errors.currentFieldName && (
+          <p className="mt-1 text-sm text-red-500">{errors.currentFieldName}</p>
+        )}
 
         {customFields.length >0 && (
           <div className="mt-4">

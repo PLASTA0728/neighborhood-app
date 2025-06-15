@@ -27,15 +27,26 @@ export default function NewSession() {
   const [mapName, setMapName ] = useState("");
   const [template, setTemplate ] = useState("");
 
-  const [errors, setErrors] = useState<{ groupName?: string; mapName?: string }>({});
+  const [errors, setErrors] = useState<{ groupName?: string; mapName?: string; currentFieldName?: string; }>({});
 
-  const validate = () => {
-    const newErrors: typeof errors = {};
+  const validateShare = () => {
+    const newErrors: Partial<typeof errors> = {};
     if (!groupName.trim()) newErrors.groupName = "group name is required :(";
     if (!mapName.trim()) newErrors.mapName = "map name is required :(";
-    setErrors(newErrors);
+
+    setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
   };
+
+  const validateAdd = () => {
+    const newErrors: Partial<typeof errors> = {};
+    if (!currentField.fieldName.trim()) {
+      newErrors.currentFieldName = "field name is required :(";
+    }
+
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  }
 
   // initialize for the states that are used on frontend
   type CustomField = {
@@ -50,7 +61,7 @@ export default function NewSession() {
   const [countdownActive, setCountdownActive] = useState(false); // for the countdown before redirecting to edit page
 
   const handleShareSession = async () => {
-    if (!validate()) return;
+    if (!validateShare()) return;
     setIsSaving(true);
     try {
       await shareSession({ groupName, mapName, customFields });
@@ -61,7 +72,7 @@ export default function NewSession() {
   }
 
   const addField = () => {
-    if (currentField.fieldName.trim() === "") return;
+    if (!validateAdd()) return;
     setCustomFields([...customFields, currentField]);
     setCurrentField({ fieldName: "", fieldType: "string" });
   };
