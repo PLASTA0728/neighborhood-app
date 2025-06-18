@@ -8,7 +8,7 @@ export async function saveUser(
         contact: string;
         role: string;
         location?: {
-            id: string;
+            id?: string;
             coordinates: [number, number];
             displayName: string;
         };

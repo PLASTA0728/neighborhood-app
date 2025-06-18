@@ -15,7 +15,7 @@ const locationSchema = new Schema<ILocation>(
     },
     id: {
       type: String,
-      required: true
+      required: false
     },
     coordinates: {
       type: [Number],
