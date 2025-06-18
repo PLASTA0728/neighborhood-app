@@ -34,14 +34,14 @@ const locationSchema = new Schema<ILocation>(
 const userSchema = new Schema<IUser>(
   {
     name: {type: String, required: true },
-    age: {type: String, required: true },
-    contact: {type: String, required: true },
-    role: {type: String, required: true },
+    age: {type: String, required: false },
+    contact: {type: String, required: false },
+    role: {type: String, required: false },
     location: {type: locationSchema, required: true},
     customResponses: [
         {
-            fieldName: { type: String, required: true },
-            response: { type: String, required: true },
+            fieldName: { type: String, required: false },
+            response: { type: String, required: false },
             _id: false        
         }
     ],
