@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/db/connectMongo";
 import SessionModel from "@/lib/models/Session";
 import type { IUser } from "@/utils/types";
-import mongoose from "mongoose";
+import mongoose, {Types} from "mongoose";
 
 export async function POST(req: NextRequest) {
     await connectMongo();
     const { sessionNo, name, age, contact, role, location, customResponses } = await req.json();
+
 
     const newUser:IUser = {
         name,

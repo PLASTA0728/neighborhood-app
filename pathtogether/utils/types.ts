@@ -19,7 +19,7 @@ export interface IUser {
   role: string;
   location: ILocation;
   customResponses: ICustomResponse[];
-  // _id: ObjectId;
+  _id?: ObjectId;
 }
 
 export interface ICustomField {

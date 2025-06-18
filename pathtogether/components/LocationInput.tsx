@@ -1,3 +1,4 @@
+// TODO: https://developers.google.com/maps/documentation/javascript/place-autocomplete-data use this to beautify
 'use client';
 
 import { useEffect, useRef } from 'react';
