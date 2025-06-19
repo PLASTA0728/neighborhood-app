@@ -2,17 +2,13 @@
 
 import React, { useCallback, useState, useEffect } from 'react';
 import {
-  AdvancedMarker,
   APIProvider,
-  InfoWindow,
   Map,
-  Marker,
-  Pin
 } from '@vis.gl/react-google-maps';
 import type { IUser } from '@/utils/types';
-import MarkerWithInfowindow from '@/components/MarkerWithInfowindow';
 import { useParams } from 'next/navigation';
 import { useUserActions } from '@/hooks/useUserActions';
+import MarkerWithInfoWindow from '@/components/MarkerWithInfoWindow';
 
 export default function MapPage() {
   const API_KEY = process.env.NEXT_PUBLIC_MAP_API_KEY as string;
@@ -30,7 +26,6 @@ export default function MapPage() {
     refreshUsers();
   }, [refreshUsers]);
 
-
   return (
     <APIProvider apiKey={API_KEY} libraries={['marker']}>
       <div className="h-screen w-full">
@@ -45,7 +40,7 @@ export default function MapPage() {
             users.map((user, i) => {
               console.log("Rendering marker for user:", user); // ✅ LOG HERE
               return (
-                <MarkerWithInfowindow key={i} sessionNo={sessionNo.toString()} user={user} refreshUsers={refreshUsers} />
+                <MarkerWithInfoWindow key={i} sessionNo={sessionNo.toString()} user={user} refreshUsers={refreshUsers} />
               )})
             )}
           {/* Marker with stateful InfoWindow */}
