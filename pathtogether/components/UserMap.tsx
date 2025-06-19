@@ -1,13 +1,12 @@
 "use client";
 
 import React from 'react';
+import MarkerWithInfoWindow from './MarkerWithInfoWin';
 import {
   APIProvider,
   Map,
 } from '@vis.gl/react-google-maps';
 import type { IUser } from '@/utils/types';
-import MarkerWithInfoWindow from '@/components/MarkerWithInfoWindow';
-
 type Props = {
   sessionNo: string;
   users: IUser[];
@@ -36,6 +35,7 @@ export default function UserMap({sessionNo, users, refreshUsers}: Props) {
           {/* Marker with stateful InfoWindow */}
         </Map>
       </div>
+      {/* bruh why is this so strange?? */}
     </APIProvider>
   );
 }

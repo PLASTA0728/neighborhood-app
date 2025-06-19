@@ -1,7 +1,7 @@
 import type { IUser } from "@/utils/types";
 import { AdvancedMarker, AdvancedMarkerAnchorPoint, InfoWindow, Pin, useAdvancedMarkerRef } from "@vis.gl/react-google-maps";
-import React, {useState} from "react"; 
 import Card from "./Card";
+import React, {useState} from "react"; 
 
 type Props = {
   sessionNo: string;
@@ -49,6 +49,7 @@ export default function MarkerWithInfoWindow({sessionNo, user, refreshUsers, ...
           <Card sessionNo={sessionNo} user={user} refreshUsers={refreshUsers} />
         </InfoWindow>
       )}
+      {/* bruh adding this just because i need to make the git work */}
     </div>
   )
   
