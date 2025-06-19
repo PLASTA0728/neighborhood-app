@@ -8,10 +8,10 @@ import { SquareLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import CreateFormFields from "@/components/CreateFormFields";
 import Walkthrough from "@/components/Walkthrough";
-import useMediaQuery from "@/hooks/useMediaQuery";
+// import useMediaQuery from "@/hooks/useMediaQuery";
 
 export default function NewSession() {
-  const isSmallorUp = useMediaQuery("(min-width:520px)");
+  // const isSmallorUp = useMediaQuery("(min-width:520px)");
 
   const { // hooks must be inside
     sessionNo,

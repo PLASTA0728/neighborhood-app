@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React from 'react';
 import {
   APIProvider,
   Map,
 } from '@vis.gl/react-google-maps';
 import type { IUser } from '@/utils/types';
-import { useParams } from 'next/navigation';
-import { useUserActions } from '@/hooks/useUserActions';
 import MarkerWithInfoWindow from '@/components/MarkerWithInfoWindow';
 
 type Props = {

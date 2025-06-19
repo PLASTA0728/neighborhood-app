@@ -2,7 +2,6 @@
 // https://developers.google.com/codelabs/maps-platform/maps-platform-101-react-js#9
 
 import { Button } from '@/ui/button';
-import Card from './Card';
 import type { IUser } from '@/utils/types';
 import UserMap from './UserMap';
 
