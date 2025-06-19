@@ -10,6 +10,7 @@ import { SquareLoader } from 'react-spinners'
 import { useUserFormData } from '@/hooks/useUserFormData'
 import FormFields from '@/components/UserFormFields'
 
+
 export default function EditUserPage() {
     const { sessionNo, userId } = useParams();
     const router = useRouter();
@@ -130,6 +131,7 @@ export default function EditUserPage() {
                         } catch (e) {
                             alert("something broke :( " + e.message);
                         }
+                        router.push(`/${sessionNo}/edit`)
                     }}
                 >
                     push my changes
