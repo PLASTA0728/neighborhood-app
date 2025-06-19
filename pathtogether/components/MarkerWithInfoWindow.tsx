@@ -1,6 +1,6 @@
 import type { IUser } from "@/utils/types";
 import { AdvancedMarker, AdvancedMarkerAnchorPoint, InfoWindow, Pin, useAdvancedMarkerRef } from "@vis.gl/react-google-maps";
-import Card from "./Card";
+import Popup from "./Popup";
 import React, {useState} from "react"; 
 
 type Props = {
@@ -18,6 +18,7 @@ export default function MarkerWithInfoWindow({sessionNo, user, refreshUsers, ...
     lng: user.location.coordinates[0],
     lat: user.location.coordinates[1],
   };
+
 
   return (
     <div {...props}>
@@ -40,16 +41,12 @@ export default function MarkerWithInfoWindow({sessionNo, user, refreshUsers, ...
           glyphColor={clicked? '#c8a310': hovered ? '#0f677a' : null}
           />
       </AdvancedMarker>
+
       {shouldShowInfoWindow && (
-        <InfoWindow
-          pixelOffset={[0,-2]}
-          anchor={marker}
-          onCloseClick={() => {setClicked(false); setHovered(false);}}
-        >
-          <Card sessionNo={sessionNo} user={user} refreshUsers={refreshUsers} />
-        </InfoWindow>
+          <Popup sessionNo={sessionNo} user={user} refreshUsers={refreshUsers} 
+            anchor={marker}
+            onCloseClick={() => {setClicked(false); setHovered(false);}}/>
       )}
-      {/* bruh adding this just because i need to make the git work */}
     </div>
   )
   
