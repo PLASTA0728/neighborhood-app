@@ -13,7 +13,7 @@ type Props = {
   refreshUsers: () => void;
 }
 
-export default function UserMap({sessionNo, users, refreshUsers}: Props) {
+export default function MapView({sessionNo, users, refreshUsers}: Props) {
   const API_KEY = process.env.NEXT_PUBLIC_MAP_API_KEY as string;
   return (
     <APIProvider apiKey={API_KEY} libraries={['marker']}>
@@ -27,15 +27,13 @@ export default function UserMap({sessionNo, users, refreshUsers}: Props) {
         >
           {users.length > 0 && (
             users.map((user, i) => {
-              console.log("Rendering marker for user:", user); // ✅ LOG HERE
+              console.log("Rendering marker for user:", user);
               return (
                 <MarkerWithInfoWindow key={i} sessionNo={sessionNo.toString()} user={user} refreshUsers={refreshUsers} />
               )})
             )}
-          {/* Marker with stateful InfoWindow */}
         </Map>
       </div>
-      {/* bruh why is this so strange?? */}
     </APIProvider>
   );
 }
