@@ -1,5 +1,5 @@
 import type { IUser } from "@/utils/types";
-import { AdvancedMarker, AdvancedMarkerAnchorPoint, InfoWindow, Pin, useAdvancedMarkerRef } from "@vis.gl/react-google-maps";
+import { AdvancedMarker, AdvancedMarkerAnchorPoint, Pin, useAdvancedMarkerRef } from "@vis.gl/react-google-maps";
 import Popup from "./Popup";
 import React, {useState} from "react"; 
 
