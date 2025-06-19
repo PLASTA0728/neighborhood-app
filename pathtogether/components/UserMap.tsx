@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import MarkerWithInfoWindow from './MarkerWithInfoWin';
+import MarkerWithInfoWindow from './MarkerWithInfoWindow';
 import {
   APIProvider,
   Map,
