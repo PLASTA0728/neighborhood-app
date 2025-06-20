@@ -4,6 +4,7 @@ import FormInput from "./FormInput";
 import LocationInput from "./LocationInput";
 import { Switch } from "@headlessui/react";
 import CustomFieldList from "./CustomFieldList";
+import { useState } from "react";
 
 type Props = {
   name: string;
@@ -20,6 +21,8 @@ type Props = {
   mapDoc: any;
   customResponses: any;
   handleCustomChange: (fieldName: string, value: string) => void;
+  errors?: { name?: string; location?: string };
+  setErrors?: React.Dispatch<React.SetStateAction<{name?: string; location?: string;}>>;
 };
 
 export default function FormFields({
@@ -37,24 +40,64 @@ export default function FormFields({
   mapDoc,
   customResponses,
   handleCustomChange,
+  errors,
+  setErrors,
 }: Props) {
-  return (
+return (
     <>
       <div className="flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4">
-        <FormInput placeholder="my name" value={name} onChange={setName} />
-        <FormInput placeholder="my age" value={age} onChange={setAge} />
-        <FormInput
-          placeholder="my contact"
-          value={contact}
-          onChange={setContact}
-        />
-        <FormInput placeholder="my role" value={role} onChange={setRole} />
+  <div className="flex flex-col w-full">
+    <FormInput
+      placeholder="my name"
+      value={name}
+      onChange={(val) => {
+        setName(val);
+        if (errors.name) setErrors(prev => ({ ...prev, name: undefined }));
+      }}
+    />
+    {errors.name && (
+      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+    )}
+  </div>
+  <div className="flex flex-col w-full">
+
+    <FormInput
+      placeholder="my age"
+      value={age}
+      onChange={setAge}
+    />
+  </div>
       </div>
 
-      <div className="flex flex-col">
-        <LocationInput onPlaceSelect={(location) => setLocation(location)} />
-      </div>
+<div className={`flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4 ${errors.name ? '-translate-y-3' : ''}`}>
+  <div className="flex flex-col w-full">
+    <FormInput
+      placeholder="my contact"
+      value={contact}
+      onChange={setContact}
+    />
+  </div>
 
+  <div className="flex flex-col w-full">
+    <FormInput
+      placeholder="my role"
+      value={role}
+      onChange={setRole}
+    />
+  </div>
+</div>
+
+<div className={`{flex flex-col w-full ${errors.name ? '-translate-y-2' : ''}}`}>
+  <LocationInput
+    onPlaceSelect={(location) => {
+      setLocation(location);
+      if (errors.location) setErrors(prev => ({ ...prev, location: undefined }));
+    }}
+  />
+  {errors.location && (
+    <p className="mt-0.5 text-sm text-red-500">{errors.location}</p>
+  )}
+</div>
       <div className="mt-4 flex justify-between">
         <div>blurred location</div>
         <Switch

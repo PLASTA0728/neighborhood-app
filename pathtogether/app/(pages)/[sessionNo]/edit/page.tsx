@@ -17,6 +17,39 @@ export default function EditSession() {
     const [mapDoc, setMapDoc] = useState(null);
     const [loading, setLoading] = useState(true);
     const [enabled, setEnabled] = useState(false);
+    const [isSaving, setIsSaving] = useState(false); 
+
+    const [errors, setErrors] = useState<{ name?: string; location?: string; }>({});
+    const validateSubmit = () => {
+        const newErrors: Partial<typeof errors> = {};
+        if (!name.trim()) newErrors.name = "please fill out your name!";
+        if (location === null) newErrors.location = "please select a location!";
+        setErrors((prev) => ({...prev, ...newErrors}));
+        return Object.keys(newErrors).length === 0;
+    };
+    
+    const handleSubmitUser = async () => {
+        if (!validateSubmit()) return;
+        setIsSaving(true);
+        console.log("sending to db:", location);
+        try {
+            await saveUser(sessionNo.toString(), {
+                name, 
+                age,
+                contact,
+                role, 
+                location,
+                customResponses
+            });
+            alert("user saved!");
+            await new Promise(r => setTimeout(r, 300));
+            const data = await fetchUsers(sessionNo.toString());
+            if (data) setUsers(data);
+        } catch (e) {
+            alert("something broke: " + e.message + " :( ");
+        }
+        setIsSaving(false);
+    }
 
     // for the change value of the custom fields
     const [name, setName] = useState("");
@@ -108,31 +141,16 @@ export default function EditSession() {
                     mapDoc={mapDoc}
                     customResponses={customResponses}
                     handleCustomChange={handleCustomChange}
+                    errors={errors}
+                    setErrors={setErrors}
                 />
 
                 <div className='flex flex-col items-center'>
                 <Button
                     className="mt-4"
                     type="submit"
-                    onClick={async () => {
-                        console.log("sending to db:", location);
-                        try {
-                            await saveUser(sessionNo.toString(), {
-                                name, 
-                                age,
-                                contact,
-                                role, 
-                                location,
-                                customResponses
-                            });
-                            alert("user saved!");
-                            await new Promise(r => setTimeout(r, 300));
-                            const data = await fetchUsers(sessionNo.toString());
-                            if (data) setUsers(data);
-                        } catch (e) {
-                            alert("something broke: " + e.message + " :( ");
-                        }
-                    }}
+                    onClick={handleSubmitUser}
+                    disabled={isSaving}
                 >
                     pin myself on the map!
                 </Button>
