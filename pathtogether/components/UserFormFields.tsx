@@ -4,7 +4,6 @@ import FormInput from "./FormInput";
 import LocationInput from "./LocationInput";
 import { Switch } from "@headlessui/react";
 import CustomFieldList from "./CustomFieldList";
-import { useState } from "react";
 
 type Props = {
   name: string;
