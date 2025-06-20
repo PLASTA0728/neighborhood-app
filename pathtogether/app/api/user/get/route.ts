@@ -13,10 +13,13 @@ export async function GET(req: NextRequest) {
     await connectMongo();
 
     try {
-        const session = await SessionModel.findOne({ sessionNo });
+        let session = await SessionModel.findOne({ sessionNo });
 
         if (!session) {
-            return NextResponse.json({ message: "no submitted session users yet, create your own!"});
+            session = await SessionModel.create({
+            sessionNo,
+            users: [],
+        });
         }
         return NextResponse.json(session.users);
     } catch (err) {
