@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import monochrome from "@/utils/map-styles/monochrome.json";
 import { APIProvider, Map, useMap } from "@vis.gl/react-google-maps";
 
 const AnimatedMapInner = () => {
   const map = useMap();
-  const [lng, setLng] = useState(-122.4194);
+  const lngRef = useRef(-122.4194);
   const lat = 37.7749;
 
   useEffect(() => {
@@ -16,13 +16,12 @@ const AnimatedMapInner = () => {
     map.setMapTypeId('styled_map');
 
     const interval = setInterval(() => {
-      const newLng = lng + 0.001;
-      map.setCenter({lat, lng: newLng});
-      setLng(newLng);
+      lngRef.current += 0.001;
+      map.setCenter({ lat, lng: lngRef.current });
     }, 30);
 
     return () => clearInterval(interval);
-  }, [map, lng]);
+  }, [map]);
 
   return null;
 };
