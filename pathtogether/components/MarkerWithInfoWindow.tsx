@@ -43,7 +43,8 @@ export default function MarkerWithInfoWindow({sessionNo, user, refreshUsers, ...
       </AdvancedMarker>
 
       {shouldShowInfoWindow && (
-          <Popup sessionNo={sessionNo} user={user} refreshUsers={refreshUsers} 
+          <Popup sessionNo={sessionNo} user={user} refreshUsers={refreshUsers}
+            pixelOffset={[0,-10]}
             anchor={marker}
             onCloseClick={() => {setClicked(false); setHovered(false);}}/>
       )}
