@@ -1,41 +1,51 @@
 'use client';
-import { useRef, useEffect } from "react";
+import { useEffect, useState } from "react";
 import monochrome from "@/utils/map-styles/monochrome.json";
+import { APIProvider, Map, useMap } from "@vis.gl/react-google-maps";
 
-export default function AnimatedMap() {
-  const mapRef = useRef(null);
+const AnimatedMapInner = () => {
+  const map = useMap();
+  const [lng, setLng] = useState(-122.4194);
+  const lat = 37.7749;
 
   useEffect(() => {
-    if (!window.google || !mapRef.current) return;
+    if (!map) return;
 
-    const initialCenter = { lat: 37.7749, lng: -122.4194 };
-    const map = new google.maps.Map(mapRef.current, {
-      center: initialCenter,
-      zoom: 10,
-      disableDefaultUI: true,
-      gestureHandling: "none",
-      keyboardShortcuts: false,
-      draggable: false,
-      scrollwheel: false,
-      zoomControl: false,
-      styles: monochrome,
-    });
+    const styledMapType = new google.maps.StyledMapType(monochrome);
+    map.mapTypes.set('styled_map', styledMapType);
+    map.setMapTypeId('styled_map');
 
-    let currentLng = initialCenter.lng;
-    const animateMap = () => {
-      currentLng += 0.001;
-      map.setCenter({ lat: initialCenter.lat, lng: currentLng });
-    };
+    const interval = setInterval(() => {
+      const newLng = lng + 0.001;
+      map.setCenter({lat, lng: newLng});
+      setLng(newLng);
+    }, 30);
 
-    const interval = setInterval(animateMap, 30);
     return () => clearInterval(interval);
-  }, []);
+  }, [map, lng]);
+
+  return null;
+};
+
+export default function AnimatedMap() {
+  const API_KEY = process.env.NEXT_PUBLIC_MAP_API_KEY as string;
 
   return (
-    <div
-      ref={mapRef}
-      className="absolute w-full h-full z-10 opacity-10"
-      style={{ pointerEvents: "none" }}
-    ></div>
-  );
+    <APIProvider apiKey={API_KEY}>
+      <div className="absolute w-full h-full z-10 opacity-10 pointer-events-none">
+        <Map
+          defaultCenter={{ lat: 37.7749, lng: -122.4194 }}
+          defaultZoom={10}
+          disableDefaultUI
+          gestureHandling="none"
+          draggable={false}
+          keyboardShortcuts={false}
+          scrollwheel={false}
+          zoomControl={false}
+        >
+          <AnimatedMapInner />
+        </Map>
+      </div>
+    </APIProvider>
+  )
 }

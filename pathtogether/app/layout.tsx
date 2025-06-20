@@ -28,11 +28,6 @@ export default function RootLayout({
       <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_MAP_API_KEY}&libraries=places`}
-        async
-        defer
-      ></script>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
