@@ -1,10 +1,11 @@
 import type { IUser } from "@/utils/types";
 import { useMap } from "@vis.gl/react-google-maps";
 import { useEffect } from "react";
-import MarkerWithInfoWindow from "./MarkerWithInfoWindow";
 import blueEssence from "@/utils/map-styles/blue-essence";
 import avocadoWorld from "@/utils/map-styles/avocado-world";
 import wy from "@/utils/map-styles/wy";
+import Markers from "./Markers";
+import { Map } from "@vis.gl/react-google-maps";
 
 export default function MapContent({
   sessionNo,
@@ -17,6 +18,7 @@ export default function MapContent({
   refreshUsers: () => void;
   mapStyle: string;
 }) {
+  const mapId = process.env.NEXT_PUBLIC_MAPID as string;
   const map = useMap();
 
   useEffect(() => {
@@ -51,16 +53,17 @@ export default function MapContent({
   }, [mapStyle, map]);
 
   return (
-    <>
-      {Array.isArray(users) && users.length > 0 && ((users).map((user, index) => (
-        <MarkerWithInfoWindow
-          key={user._id?.toString() ?? `user-${index}`}
-          sessionNo={sessionNo.toString()}
-          user={user}
-          refreshUsers={refreshUsers}
-        />
-      ))
-      )}
-    </>
+    <Map
+      mapId={mapId}
+      defaultZoom={3}
+      defaultCenter={{ lat: 20, lng: 275 }}
+      gestureHandling="greedy"
+      disableDefaultUI
+      colorScheme={mapStyle === 'dark' ? 'DARK' : 'LIGHT'}
+    >
+    {users.length > 0 && 
+      <Markers users={users} sessionNo={sessionNo} refreshUsers={refreshUsers} />
+    }
+    </Map>
   );
 }
