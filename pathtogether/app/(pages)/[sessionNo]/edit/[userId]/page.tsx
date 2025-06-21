@@ -11,7 +11,7 @@ import { useUserFormData } from '@/hooks/useUserFormData'
 import FormFields from '@/components/UserFormFields'
 
 
-export default function EditUserPage() {
+export default function EditUser() {
     const { sessionNo, userId } = useParams();
     const router = useRouter();
     const { updateUser, fetchUsers } = useUserActions();

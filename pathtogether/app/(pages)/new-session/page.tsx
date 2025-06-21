@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { useState, useEffect } from "react"
 import { Button } from "@/ui/button"
 import { useSessionManager } from "@/hooks/useSessionManager";
@@ -11,7 +11,8 @@ import Walkthrough from "@/components/Walkthrough";
 // import useMediaQuery from "@/hooks/useMediaQuery";
 
 export default function NewSession() {
-  // const isSmallorUp = useMediaQuery("(min-width:520px)");
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => { setIsMounted(true); }, []);
 
   const { // hooks must be inside
     sessionNo,
@@ -115,7 +116,7 @@ export default function NewSession() {
 
     return () => clearTimeout(timer); 
   }, [countdown, countdownActive, router, sessionNo])
-
+  if (!isMounted) { return null; }
   return (
     <main className="relative w-full h-screen">
       <div className="flex flex-col sm:flex-row min-h-screen w-full">
@@ -159,7 +160,7 @@ export default function NewSession() {
       {showPopup && (
         <div className="fixed inset-0 z-40">
           <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-50 bg-white z-30 rounded-md text-gray-800 p-4">
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 bg-white z-30 rounded-md text-gray-800 p-4">
             { !hasUpdatedSession && (
               <div>
                 your session code has been generated successfully 🎉 you can share this with your friends to join the map.

@@ -1,9 +1,6 @@
 import type { IUser } from "@/utils/types";
 import { useMap } from "@vis.gl/react-google-maps";
 import { useEffect } from "react";
-import blueEssence from "@/utils/map-styles/blue-essence";
-import avocadoWorld from "@/utils/map-styles/avocado-world";
-import wy from "@/utils/map-styles/wy";
 import Markers from "./Markers";
 import { Map } from "@vis.gl/react-google-maps";
 import { STYLE_MAP } from "@/utils/mapStyles";

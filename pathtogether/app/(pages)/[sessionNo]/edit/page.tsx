@@ -12,13 +12,16 @@ import FormFields from '@/components/UserFormFields'
 
 
 export default function EditSession() {
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => { setIsMounted(true); }, []);
+    
     const { sessionNo } = useParams();
     const router = useRouter();
     const [mapDoc, setMapDoc] = useState(null);
     const [loading, setLoading] = useState(true);
     const [enabled, setEnabled] = useState(false);
     const [isSaving, setIsSaving] = useState(false); 
-
+    
     const [errors, setErrors] = useState<{ name?: string; location?: string; }>({});
     const validateSubmit = () => {
         const newErrors: Partial<typeof errors> = {};
@@ -116,6 +119,7 @@ export default function EditSession() {
             </div>
         </div>
     )
+    if (!isMounted) { return null; }
 
     return (
     <main className="relative w-full">
