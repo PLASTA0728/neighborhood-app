@@ -6,6 +6,7 @@ import avocadoWorld from "@/utils/map-styles/avocado-world";
 import wy from "@/utils/map-styles/wy";
 import Markers from "./Markers";
 import { Map } from "@vis.gl/react-google-maps";
+import { STYLE_MAP } from "@/utils/mapStyles";
 
 export default function MapContent({
   sessionNo,
@@ -35,17 +36,16 @@ export default function MapContent({
     }, [map, users]);
 
   useEffect(() => {
-    // change map style
-    const mapStyleDict: Record<string, google.maps.MapTypeStyle[]> = {
-      light: null,
-      dark: null,
-      'blue-essence': blueEssence,
-      'avocado-world': avocadoWorld,
-      wy: wy,
-    };
+    if (!map) return;
 
-    const styleToApply = mapStyleDict[mapStyle];
-    if (!styleToApply) return;
+    const styleToApply = STYLE_MAP[mapStyle] ?? null;
+
+    // If the style is `null`, reset to default
+    if (!styleToApply) {
+      map.setOptions({ styles: null });
+      map.setMapTypeId('roadmap');
+      return;
+    }
 
     const styledMapType = new google.maps.StyledMapType(styleToApply);
     map.mapTypes.set('styled_map', styledMapType);
