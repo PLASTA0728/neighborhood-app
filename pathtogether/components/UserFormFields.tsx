@@ -54,7 +54,7 @@ return (
         if (errors.name) setErrors(prev => ({ ...prev, name: undefined }));
       }}
     />
-    {errors.name && (
+    {errors?.name && (
       <p className="mt-1 text-sm text-red-500">{errors.name}</p>
     )}
   </div>
@@ -68,7 +68,7 @@ return (
   </div>
       </div>
 
-<div className={`flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4 ${errors.name ? '-translate-y-3' : ''}`}>
+<div className={`flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4 ${errors?.name ? '-translate-y-3' : ''}`}>
   <div className="flex flex-col w-full">
     <FormInput
       placeholder="my contact"
@@ -86,15 +86,15 @@ return (
   </div>
 </div>
 
-<div className={`{flex flex-col w-full ${errors.name ? '-translate-y-2' : ''}}`}>
+<div className={`{flex flex-col w-full ${errors?.name ? '-translate-y-2' : ''}}`}>
   <LocationInput
     onPlaceSelect={(location) => {
       setLocation(location);
       if (errors.location) setErrors(prev => ({ ...prev, location: undefined }));
     }}
   />
-  {errors.location && (
-    <p className="mt-0.5 text-sm text-red-500">{errors.location}</p>
+  {errors?.location && (
+    <p className="mt-0.5 text-sm text-red-500">{errors?.location}</p>
   )}
 </div>
       <div className="mt-4 flex justify-between">
