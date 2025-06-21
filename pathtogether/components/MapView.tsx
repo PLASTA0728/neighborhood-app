@@ -19,7 +19,7 @@ export default function MapView({sessionNo, users, refreshUsers, mapStyle}: Prop
   
   return (
     <APIProvider apiKey={API_KEY} libraries={['marker']}>
-      <div className="h-screen w-full">
+      <div className="h-screen w-full overflow-hidden">
           <MapContent users={users} sessionNo={sessionNo} refreshUsers={refreshUsers} mapStyle={mapStyle} />
       </div>
     </APIProvider>

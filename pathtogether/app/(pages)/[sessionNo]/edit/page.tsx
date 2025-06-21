@@ -119,8 +119,8 @@ export default function EditSession() {
 
     return (
     <main className="relative w-full">
-        <div className='flex flex-col sm:flex-row min-h-screen w-full'>
-            <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 relative">
+        <div className='flex flex-col sm:flex-row h-screen w-full'>
+            <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 relative overflow-y-auto h-full">
                 <div className='text-2xl text-center'>
                 take me on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map for <span className='text-emerald-400'>{mapDoc?.groupName}</span>!
                 </div>
@@ -145,7 +145,7 @@ export default function EditSession() {
                     setErrors={setErrors}
                 />
 
-                <div className='flex flex-col items-center'>
+                <div className='flex flex-col items-center mb-4'>
                 <Button
                     className="mt-4"
                     type="submit"
