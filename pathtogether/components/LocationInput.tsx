@@ -3,6 +3,8 @@
 
 import { useEffect, useRef } from 'react';
 import type { ILocation } from '@/utils/types';
+import { APIProvider } from '@vis.gl/react-google-maps';
+
 
 type Props = {
   onPlaceSelect?: (place: ILocation) => void;
@@ -64,6 +66,7 @@ export default function LocationInput({
 }, []);
 
   return (
+    <APIProvider apiKey={process.env.NEXT_PUBLIC_MAP_API_KEY}>
     <div
       ref={containerRef}
       className={`rounded-md bg-white ${className}`}
@@ -71,5 +74,6 @@ export default function LocationInput({
       <p className="mb-2 font-semibold text-gray-700">Search for a place:</p>
       {/* Autocomplete Web Component will be injected here */}
     </div>
+    </APIProvider>
   );
 }
