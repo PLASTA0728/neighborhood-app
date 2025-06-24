@@ -4,6 +4,8 @@ import FormInput from "./FormInput";
 import LocationInput from "./LocationInput";
 import { Switch } from "@headlessui/react";
 import CustomFieldList from "./CustomFieldList";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import clsx from "clsx";
 
 type Props = {
   name: string;
@@ -42,9 +44,13 @@ export default function FormFields({
   errors,
   setErrors,
 }: Props) {
+
+const smBreakpoint = useMediaQuery('(min-width:520px)');
+
+
 return (
     <>
-      <div className="flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4">
+  <div className={clsx(`${ smBreakpoint? 'grid grid-cols-2' : 'flex flex-col'} gap-4 pb-4`, {"-translate-y-3": errors?.name })}>
   <div className="flex flex-col w-full">
     <FormInput
       placeholder="my name"
@@ -68,7 +74,7 @@ return (
   </div>
       </div>
 
-<div className={`flex flex-col xs:grid xs:grid-cols-2 sm:max-smm:flex sm:max-smm:flex-col gap-4 pb-4 ${errors?.name ? '-translate-y-3' : ''}`}>
+  <div className={`${ smBreakpoint? 'grid grid-cols-2' : 'flex flex-col'} gap-4 pb-4`}>
   <div className="flex flex-col w-full">
     <FormInput
       placeholder="my contact"

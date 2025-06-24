@@ -8,9 +8,10 @@ import { SquareLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import CreateFormFields from "@/components/CreateFormFields";
 import Walkthrough from "@/components/Walkthrough";
-// import useMediaQuery from "@/hooks/useMediaQuery";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export default function NewSession() {
+  const smBreakpoint = useMediaQuery('(min-width:520px)');
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => { setIsMounted(true); }, []);
 
@@ -119,8 +120,8 @@ export default function NewSession() {
   if (!isMounted) { return null; }
   return (
     <main className="relative w-full h-screen">
-      <div className="flex flex-col sm:flex-row min-h-screen w-full">
-        <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 flex flex-col relative">
+      <div className={`flex ${ smBreakpoint? 'flex-row' : 'flex-col '} min-h-screen w-full`}>
+        <div className={`mb-6 ${ smBreakpoint? 'w-[400px]' : 'w-full'} pt-4 pl-4 pr-4 flex flex-col relative`}>
           <CreateFormFields 
             groupName={groupName}
             setGroupName={setGroupName}
@@ -138,7 +139,7 @@ export default function NewSession() {
           />
 
           <Button
-            className="mt-6 sm:fixed sm:right-10 sm:bottom-8 z-30 self-center sm:self-auto "
+            className={`mt-6 z-30 ${ smBreakpoint? 'fixed right-10 bottom-8 self-auto' : 'self-center'}`}
             onClick={handleShareSession}
             disabled={isSaving}
           >

@@ -9,9 +9,10 @@ import Panel from '@/components/Panel'
 import { SquareLoader } from 'react-spinners'
 import { useUserFormData } from '@/hooks/useUserFormData'
 import FormFields from '@/components/UserFormFields'
-
+import useMediaQuery from '@/hooks/useMediaQuery'
 
 export default function EditUser() {
+    const smBreakpoint = useMediaQuery('(min-width:520px)');
     const { sessionNo, userId } = useParams();
     const router = useRouter();
     const { updateUser, fetchUsers } = useUserActions();
@@ -84,8 +85,8 @@ export default function EditUser() {
 
     return (
     <main className="relative w-full">
-        <div className='flex flex-col sm:flex-row min-h-screen sm:h-screen w-full'>
-            <div className="w-full mb-6 sm:w-[400px] pt-4 pl-4 pr-4 relative sm:overflow-y-auto sm:h-full">
+        <div className={`flex ${ smBreakpoint? 'flex-row h-screen' : 'flex-col min-h-screen'}`}>
+            <div className={`${ smBreakpoint? 'w-[400px] overflow-y-auto h-full' : 'w-full'} mb-6 pt-4 pl-4 pr-4 relative`}>
                 <div className='text-2xl text-center'>
                 you are now editing <span className='text-emerald-400'>{name}</span>&apos;s info on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map
                 </div>
