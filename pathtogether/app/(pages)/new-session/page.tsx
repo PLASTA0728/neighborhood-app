@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import CreateFormFields from "@/components/CreateFormFields";
 import Walkthrough from "@/components/Walkthrough";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function NewSession() {
   const smBreakpoint = useMediaQuery('(min-width:520px)');
@@ -120,8 +121,12 @@ export default function NewSession() {
   if (!isMounted) { return null; }
   return (
     <main className="relative w-full h-screen">
-      <div className={`flex ${ smBreakpoint? 'flex-row' : 'flex-col '} min-h-screen w-full`}>
+      <div className="absolute top-5 right-5 z-20">
+        <ThemeToggle />
+      </div>
+      <div className={`flex ${ smBreakpoint? 'flex-row' : 'flex-col '} min-h-screen w-full bg-gray-100 dark:bg-gray-800`}>
         <div className={`mb-6 ${ smBreakpoint? 'w-[400px]' : 'w-full'} pt-4 pl-4 pr-4 flex flex-col relative`}>
+          
           <CreateFormFields 
             groupName={groupName}
             setGroupName={setGroupName}
@@ -152,7 +157,7 @@ export default function NewSession() {
             </div>
           )}
         </div>
-        <div className="flex-1 bg-gray-100 flex justify-center p-10">
+        <div className="flex-1 bg-gray-100 flex justify-center p-10 bg-white dark:bg-black">
           <div className="relative text-gray-600 grid gap-2">
             <Walkthrough />
           </div>
@@ -161,7 +166,7 @@ export default function NewSession() {
       {showPopup && (
         <div className="fixed inset-0 z-40">
           <div className="absolute w-full h-full bg-black opacity-60 z-20" onClick={hideSessionNo}></div>
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 bg-white z-30 rounded-md text-gray-800 p-4">
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 bg-white dark:bg-gray-800 z-30 rounded-md text-gray-800 dark:text-gray-400 p-4">
             { !hasUpdatedSession && (
               <div>
                 your session code has been generated successfully 🎉 you can share this with your friends to join the map.
@@ -175,7 +180,7 @@ export default function NewSession() {
             <div className="text-center text-2xl font-bold mt-2">
               {`session code: ${sessionNo}`}
             </div>
-            <div className="text-center bg-gray-300 p-2 rounded-md">redirect to the <Link href={`/${sessionNo}/edit`} className="text-blue-400" >edit session page</Link> in {countdown} second{countdown !== 1 && "s"}...</div>
+            <div className="text-center bg-gray-300 dark:bg-gray-600 p-2 rounded-md">redirect to the <Link href={`/${sessionNo}/edit`} className="text-blue-400" >edit session page</Link> in {countdown} second{countdown !== 1 && "s"}...</div>
           </div>
         </div>
       )}

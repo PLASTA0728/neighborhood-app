@@ -5,7 +5,7 @@ export default function SessionInput({ value, onChange }) {
     return (
         <div className="flex">
             <input 
-                className="z-20 placeholder:text-gray-500 bg-black px-4 py-4 w-75 relative left-0 rounded-md"
+                className="monochrome z-20"
                 placeholder="enter your session code"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
