@@ -1,11 +1,11 @@
 "use client";
 
 import FormInput from "./FormInput";
-import LocationInput from "./LocationInput";
 import { Switch } from "@headlessui/react";
 import CustomFieldList from "./CustomFieldList";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
+import { AutocompleteCustom } from "./AutocompleteCustom";
 
 type Props = {
   name: string;
@@ -50,7 +50,7 @@ const smBreakpoint = useMediaQuery('(min-width:520px)');
 
 return (
     <>
-  <div className={clsx(`${ smBreakpoint? 'grid grid-cols-2' : 'flex flex-col'} gap-4 pb-4`, {"-translate-y-3": errors?.name })}>
+  <div className={clsx(`${ smBreakpoint? 'grid grid-cols-2' : 'flex flex-col'} gap-4 pb-4`)}>
   <div className="flex flex-col w-full">
     <FormInput
       placeholder="my name"
@@ -61,7 +61,7 @@ return (
       }}
     />
     {errors?.name && (
-      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+      <p className="mt-1 text-sm !text-red-500">{errors.name}</p>
     )}
   </div>
   <div className="flex flex-col w-full">
@@ -92,15 +92,16 @@ return (
   </div>
 </div>
 
-<div className={`{flex flex-col w-full ${errors?.name ? '-translate-y-2' : ''}}`}>
-  <LocationInput
+<div className={`{flex flex-col w-full}`}>
+  <AutocompleteCustom 
+  // <LocationInput
     onPlaceSelect={(location) => {
       setLocation(location);
       if (errors.location) setErrors(prev => ({ ...prev, location: undefined }));
     }}
   />
   {errors?.location && (
-    <p className="mt-0.5 text-sm text-red-500">{errors?.location}</p>
+    <p className="mt-0.5 text-sm !text-red-500">{errors?.location}</p>
   )}
 </div>
       <div className="mt-4 flex justify-between">
