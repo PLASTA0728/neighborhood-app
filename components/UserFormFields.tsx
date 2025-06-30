@@ -7,6 +7,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
 import { AutocompleteCustom } from "./AutocompleteCustom";
 import { ILocation } from "@/utils/types";
+import BlurSlider from "./BlurSlider";
 
 type Props = {
   name: string;
@@ -108,9 +109,10 @@ return (
     <p className="mt-0.5 text-sm !text-red-500">{errors?.location}</p>
   )}
 </div>
-      <div className="mt-4 flex justify-between">
-        <div>blurred location</div>
-        <Switch
+      <div className="mt-4 flex justify-between w-85">
+        <div className="w-30">blurred location</div>
+        <BlurSlider/>
+        {/* <Switch
           checked={enabled}
           onChange={setEnabled}
           className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-white/10 p-1 ease-in-out focus:not-data-focus:outline-none data-checked:bg-blue-600 data-focus:outline data-focus:outline-white"
@@ -119,7 +121,7 @@ return (
             aria-hidden="true"
             className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out group-data-checked:translate-x-7"
           />
-        </Switch>
+        </Switch> */}
       </div>
 
       <div className="text-gray-400 text-sm mt-2">
