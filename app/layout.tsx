@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "@/public/ptg_assets/logo.svg", // or full URL if hosted externally
+        url: "@/public/ptg_assets/logo.png", // or full URL if hosted externally
         width: 1200,
         height: 630,
         alt: "PathTogether social preview",
