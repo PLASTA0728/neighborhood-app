@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useMapsLibrary, APIProvider } from '@vis.gl/react-google-maps';
 import { useAutocompleteSuggestions } from '@/hooks/useAutocompleteSuggestions';
 import { ILocation } from '@/utils/types';
@@ -6,12 +6,21 @@ import { ILocation } from '@/utils/types';
 interface Props {
   onPlaceSelect: (place: ILocation) => void;
   className?: string;
+  initialValue?: string;
 }
 
-export const AutocompleteCustom = ({ onPlaceSelect, className = '' }: Props) => {
+export const AutocompleteCustom = ({ onPlaceSelect, className = '', initialValue }: Props) => {
   const places = useMapsLibrary('places');
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(initialValue || '');
+
+  useEffect(() => {
+    if (initialValue) {
+      setInputValue(initialValue);
+      setHasSelected(true);
+    }
+  }, [initialValue]);
+
   const [hasSelected, setHasSelected] = useState(false); 
   const { suggestions, resetSession } = useAutocompleteSuggestions(
     hasSelected ? '' : inputValue // dont query the ones thats already made
@@ -51,13 +60,13 @@ export const AutocompleteCustom = ({ onPlaceSelect, className = '' }: Props) => 
           displayName:
             placeData.displayName || placeData.formattedAddress || 'Unknown Location',
         };
-
+        console.log(mappedLocation);
         onPlaceSelect(mappedLocation); // ✅ Send to DB or parent logic
       }
 
       // ✅ Update input + freeze autocomplete
       setInputValue(
-        suggestion.placePrediction.text?.text ||
+          suggestion.placePrediction?.text.toString() ||
           placeData.displayName ||
           placeData.formattedAddress ||
           ''
@@ -77,6 +86,7 @@ export const AutocompleteCustom = ({ onPlaceSelect, className = '' }: Props) => 
           value={inputValue}
           onInput={handleInput}
           placeholder="Search for a place ..."
+          onChange={(e) => {setInputValue(e.target.value); setHasSelected(false)}}
           className={`w-full px-4 py-4 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-black text-black dark:text-white  ${className}`}
         />
 

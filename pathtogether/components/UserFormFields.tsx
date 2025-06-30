@@ -6,6 +6,7 @@ import CustomFieldList from "./CustomFieldList";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
 import { AutocompleteCustom } from "./AutocompleteCustom";
+import { ILocation } from "@/utils/types";
 
 type Props = {
   name: string;
@@ -16,6 +17,7 @@ type Props = {
   setContact: (val: string) => void;
   role: string;
   setRole: (val: string) => void;
+  location: ILocation;
   setLocation: (val: any) => void;
   enabled: boolean;
   setEnabled: (val: boolean) => void;
@@ -35,6 +37,7 @@ export default function FormFields({
   setContact,
   role,
   setRole,
+  location,
   setLocation,
   enabled,
   setEnabled,
@@ -92,12 +95,13 @@ return (
   </div>
 </div>
 
-<div className={`{flex flex-col w-full}`}>
+<div className="flex flex-col w-full">
   <AutocompleteCustom 
-  // <LocationInput
+    initialValue={location?.displayName}
     onPlaceSelect={(location) => {
+      if (!location) return;
       setLocation(location);
-      if (errors.location) setErrors(prev => ({ ...prev, location: undefined }));
+      if (errors.location) {setErrors(prev => ({ ...prev, location: undefined }))};
     }}
   />
   {errors?.location && (
