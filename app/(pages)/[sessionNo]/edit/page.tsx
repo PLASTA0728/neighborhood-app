@@ -12,19 +12,24 @@ import useMediaQuery from '@/hooks/useMediaQuery'
 import { APIProvider } from '@vis.gl/react-google-maps'
 import ThemeToggle from '@/components/ThemeToggle'
 import LoadingView from '@/components/LoadingView'
+// import { Metadata } from 'next'
 
 
+
+// export const metadata: Metadata = {
+    //   title: `edit map (session code: ${sessionNo})`,
+    // };
+    
 export default function EditSession() {
+    const { sessionNo } = useParams();
     const smBreakpoint = useMediaQuery('(min-width:520px)')
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => { setIsMounted(true); }, []);
     
-    const { sessionNo } = useParams();
     const router = useRouter();
     const [mapStyle, setMapStyle] = useState("default-light");
     const [mapDoc, setMapDoc] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [enabled, setEnabled] = useState(false);
     const [isSaving, setIsSaving] = useState(false); 
     
     const [errors, setErrors] = useState<{ name?: string; location?: string; }>({});
@@ -146,8 +151,6 @@ export default function EditSession() {
                     setRole={setRole}
                     location={location}
                     setLocation={setLocation}
-                    enabled={enabled}
-                    setEnabled={setEnabled}
                     mapDoc={mapDoc}
                     customResponses={customResponses}
                     handleCustomChange={handleCustomChange}
@@ -171,3 +174,4 @@ export default function EditSession() {
     </APIProvider>
     )
 }
+

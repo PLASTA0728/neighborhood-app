@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState } from 'react';
 import { useMapsLibrary, APIProvider } from '@vis.gl/react-google-maps';
 import { useAutocompleteSuggestions } from '@/hooks/useAutocompleteSuggestions';
 import { ILocation } from '@/utils/types';

@@ -1,7 +1,6 @@
 "use client";
 
 import FormInput from "./FormInput";
-import { Switch } from "@headlessui/react";
 import CustomFieldList from "./CustomFieldList";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
@@ -20,8 +19,6 @@ type Props = {
   setRole: (val: string) => void;
   location: ILocation;
   setLocation: (val: any) => void;
-  enabled: boolean;
-  setEnabled: (val: boolean) => void;
   mapDoc: any;
   customResponses: any;
   handleCustomChange: (fieldName: string, value: string) => void;
@@ -40,8 +37,6 @@ export default function FormFields({
   setRole,
   location,
   setLocation,
-  enabled,
-  setEnabled,
   mapDoc,
   customResponses,
   handleCustomChange,

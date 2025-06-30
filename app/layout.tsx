@@ -15,8 +15,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PathTogether",
-  description: "one map, every destination",
+  title: {
+    template: "%s | PathTogether",
+    default: "PathTogether",
+  },
+  description:
+    "One map, every destination — PathTogether lets you generate map sessions, share them with friends, and pin everyone on the map for easy meetups.",
+  openGraph: {
+    title: "PathTogether",
+    description:
+      "One map, every destination — PathTogether lets you generate map sessions, share them with friends, and pin everyone on the map for easy meetups.",
+    url: "https://pathtogether.vercel.app", // <-- update to your real domain
+    type: "website",
+    images: [
+      {
+        url: "@/public/ptg_assets/logo.svg", // or full URL if hosted externally
+        width: 1200,
+        height: 630,
+        alt: "PathTogether social preview",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

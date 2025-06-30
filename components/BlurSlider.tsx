@@ -24,8 +24,6 @@ const marks = [
 
 
 export default function BlurSlider() {
-  const isDarkMode = typeof window !== 'undefined' &&
-  document.documentElement.classList.contains('dark');
   return (
       <Slider
         aria-label="Restricted values"
@@ -34,7 +32,7 @@ export default function BlurSlider() {
         valueLabelDisplay="off"
         marks={marks}
         className='w-70'      
-        sx={(theme) => ({
+        sx={{
         '& .MuiSlider-markLabel': {
           color: 'gray',
         },
@@ -42,7 +40,7 @@ export default function BlurSlider() {
           color: 'gray',
           fontWeight: 'bold',
         }
-      })}
+      }}
       />
   )
 }

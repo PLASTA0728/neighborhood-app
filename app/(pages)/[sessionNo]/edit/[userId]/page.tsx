@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState, useCallback } from 'react'
 import { Button } from "@/ui/button"
 import { useParams, useRouter } from 'next/navigation'
@@ -12,15 +13,21 @@ import useMediaQuery from '@/hooks/useMediaQuery'
 import { APIProvider } from '@vis.gl/react-google-maps'
 import ThemeToggle from '@/components/ThemeToggle'
 import LoadingView from '@/components/LoadingView'
+// import { Metadata } from 'next'
 
+
+// export const metadata: Metadata = {
+    //   title: `edit map (session code: ${sessionNo})`,
+    // };
+    
+    
 export default function EditUser() {
-    const smBreakpoint = useMediaQuery('(min-width:520px)');
     const { sessionNo, userId } = useParams();
+    const smBreakpoint = useMediaQuery('(min-width:520px)');
     const router = useRouter();
     const { updateUser, fetchUsers } = useUserActions();
     const [mapDoc, setMapDoc] = useState(null);
     const [users, setUsers] = useState<IUser[]>([]);
-    const [enabled, setEnabled] = useState(false);
     const [mapStyle, setMapStyle] = useState("default-light");
     
     const {
@@ -109,8 +116,6 @@ export default function EditUser() {
                     setRole={setRole}
                     location={location}
                     setLocation={setLocation}
-                    enabled={enabled}
-                    setEnabled={setEnabled}
                     mapDoc={mapDoc}
                     customResponses={customResponses}
                     handleCustomChange={handleCustomChange}
