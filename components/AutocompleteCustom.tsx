@@ -14,23 +14,10 @@ export const AutocompleteCustom = ({ onPlaceSelect, className = '', initialValue
 
   const [inputValue, setInputValue] = useState(initialValue || '');
 
-  useEffect(() => {
-    if (initialValue) {
-      setInputValue(initialValue);
-      setHasSelected(true);
-    }
-  }, [initialValue]);
-
   const [hasSelected, setHasSelected] = useState(false); 
   const { suggestions, resetSession } = useAutocompleteSuggestions(
     hasSelected ? '' : inputValue // dont query the ones thats already made
   );
-
-  const handleInput = useCallback((event: FormEvent<HTMLInputElement>) => {
-    const newValue = (event.target as HTMLInputElement).value;
-    setInputValue(newValue);
-    setHasSelected(false); //when user is typing again, reactivate autocomplete
-  }, []);
 
   const handleSuggestionClick = useCallback(
     async (suggestion: google.maps.places.AutocompleteSuggestion) => {
@@ -61,21 +48,25 @@ export const AutocompleteCustom = ({ onPlaceSelect, className = '', initialValue
             placeData.displayName || placeData.formattedAddress || 'Unknown Location',
         };
         console.log(mappedLocation);
-        onPlaceSelect(mappedLocation); // ✅ Send to DB or parent logic
+        onPlaceSelect(mappedLocation); 
       }
 
-      // ✅ Update input + freeze autocomplete
       setInputValue(
-          suggestion.placePrediction?.text.toString() ||
-          placeData.displayName ||
-          placeData.formattedAddress ||
-          ''
+        suggestion.placePrediction?.text.text ||
+        placeData.displayName ||
+        placeData.formattedAddress ||
+        ""
       );
       setHasSelected(true); // ❌ don't re-query suggestions after selection
       resetSession(); // reset token
     },
     [places, onPlaceSelect]
   );
+
+  useEffect(() => {
+  console.log('inputValue changed to:', inputValue);
+}, [inputValue]);
+
 
   if (!places) return null;
 
@@ -84,7 +75,6 @@ export const AutocompleteCustom = ({ onPlaceSelect, className = '', initialValue
       <div className={`autocomplete-container`}>
         <input
           value={inputValue}
-          onInput={handleInput}
           placeholder="Search for a place ..."
           onChange={(e) => {setInputValue(e.target.value); setHasSelected(false)}}
           className={`w-full px-4 py-4 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-black text-black dark:text-white  ${className}`}
@@ -95,7 +85,7 @@ export const AutocompleteCustom = ({ onPlaceSelect, className = '', initialValue
             {suggestions.map((suggestion, index) => (
               <li
                 key={index}
-                className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white"
+                className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white w-100"
                 onClick={() => handleSuggestionClick(suggestion)}
               >
                 {suggestion.placePrediction?.text.text}
