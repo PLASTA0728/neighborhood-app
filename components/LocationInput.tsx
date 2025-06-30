@@ -1,79 +1,109 @@
-// TODO: https://developers.google.com/maps/documentation/javascript/place-autocomplete-data use this to beautify
-'use client';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useMapsLibrary, APIProvider } from '@vis.gl/react-google-maps';
+import { useAutocompleteSuggestions } from '@/hooks/useAutocompleteSuggestions';
+import { ILocation } from '@/utils/types';
+import { Search } from 'lucide-react';
 
-import { useEffect, useRef } from 'react';
-import type { ILocation } from '@/utils/types';
-import { APIProvider } from '@vis.gl/react-google-maps';
-
-
-type Props = {
-  onPlaceSelect?: (place: ILocation) => void;
+interface Props {
+  onPlaceSelect: (place: ILocation) => void;
   className?: string;
-};
+  initialValue?: string;
+}
 
-export default function LocationInput({
-  onPlaceSelect, 
-  className = '',
-}: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export const LocationInput = ({ onPlaceSelect, className = '', initialValue }: Props) => {
+  const places = useMapsLibrary('places');
 
-  useEffect(() => {
-  if (!window?.google || !window?.google.maps?.importLibrary) return;
+  const [inputValue, setInputValue] = useState(initialValue || '');
 
-  const loadAutocomplete = async () => {
-    //@ts-expect-error placeAutocompleteElement does not exist on type
-    const [{ PlaceAutocompleteElement }] = await Promise.all([
-      google.maps.importLibrary('places'),
-    ]);
+  const [hasSelected, setHasSelected] = useState(false); 
+  const { suggestions, resetSession } = useAutocompleteSuggestions(
+    hasSelected ? '' : inputValue // dont query the ones thats already made
+  );
 
-    if (containerRef.current) {
-      containerRef.current.innerHTML = '';
-    }
-    const autocomplete = new PlaceAutocompleteElement();
+  const handleSuggestionClick = useCallback(
+    async (suggestion: google.maps.places.AutocompleteSuggestion) => {
+      if (!places || !suggestion.placePrediction) return;
 
-    autocomplete.id = 'place-autocomplete-textarea';
-    autocomplete.setAttribute('placeholder', 'Search for a place...');
-    autocomplete.setAttribute('style', 'width: 100%; height: auto;');
-    
-    console.log('setting up autocomplete')
-
-    autocomplete.addEventListener('gmp-select', async ({ placePrediction }) => {
-      if (!placePrediction) return;
-      const place = placePrediction.toPlace();
+      const place = suggestion.placePrediction.toPlace();
       await place.fetchFields({
-        fields: ['id', 'displayName', 'formattedAddress', 'location'],
+        fields: ['location', 'displayName', 'formattedAddress', 'id'],
       });
 
-      const placeData = place.toJSON();
-      console.log("selected place: ", placeData);
+      const placeData = place.toJSON() as {
+        id?: string;
+        displayName?: string;
+        formattedAddress?: string;
+        location?: { lat: number; lng: number };
+      };
 
-      // if (onPlaceSelect) onPlaceSelect(placeData);
-      if (onPlaceSelect && placeData?.location?.lat !== undefined && placeData?.location?.lng !== undefined) {
+      if (
+        onPlaceSelect &&
+        placeData?.location?.lat !== undefined &&
+        placeData?.location?.lng !== undefined
+      ) {
         const mappedLocation: ILocation = {
-          type: "Point",
+          type: 'Point',
           id: placeData.id,
-          coordinates: [placeData.location.lng, placeData.location.lat], // order which geoJSON uses
-          displayName: placeData.displayName || placeData.formattedAddress || 'Unknown Location',
+          coordinates: [placeData.location.lng, placeData.location.lat],
+          displayName:
+            placeData.displayName || placeData.formattedAddress || 'Unknown Location',
         };
+        console.log(mappedLocation);
+        onPlaceSelect(mappedLocation); 
+      }
 
-        onPlaceSelect(mappedLocation);
-        console.log("send to db:", mappedLocation);
-      } 
-    });
-    containerRef.current?.appendChild(autocomplete);
-  };
-  loadAutocomplete();
-}, []);
+      setInputValue(
+        suggestion.placePrediction?.text.text ||
+        placeData.displayName ||
+        placeData.formattedAddress ||
+        ""
+      );
+      setHasSelected(true); // ❌ don't re-query suggestions after selection
+      resetSession(); // reset token
+    },
+    [places, onPlaceSelect]
+  );
+
+  useEffect(() => {
+  console.log('inputValue changed to:', inputValue);
+}, [inputValue]);
+
+
+  if (!places) return null;
 
   return (
-    <APIProvider apiKey={process.env.NEXT_PUBLIC_MAP_API_KEY}>
-    <div
-      ref={containerRef}
-      className={`rounded-md bg-white ${className}`}
-    >
-      <p className="mb-2 font-semibold text-gray-700">Search for a place:</p>
-      {/* Autocomplete Web Component will be injected here */}
-    </div>
+    <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!} libraries={['places']}>
+      <div className={`autocomplete-container`}>
+      <div className="relative w-full">
+        <input
+          value={inputValue}
+          placeholder="Search for a place ..."
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            setHasSelected(false);
+          }}
+          className={`w-full px-4 py-4 pr-12 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-black text-black dark:text-white ${className}`}
+        />
+        <Search
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-white"
+          size={20}
+        />
+      </div>
+
+        {!hasSelected && suggestions.length > 0 && (
+          <ul className="custom-list mt-2 border border-gray-200 dark:border-gray-700 rounded-md shadow bg-white dark:bg-gray-900 z-50 absolute w-92">
+            {suggestions.map((suggestion, index) => (
+              <li
+                key={index}
+                className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white w-92"
+                onClick={() => handleSuggestionClick(suggestion)}
+              >
+                {suggestion.placePrediction?.text.text}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </APIProvider>
   );
-}
+};

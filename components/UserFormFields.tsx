@@ -5,7 +5,7 @@ import { Switch } from "@headlessui/react";
 import CustomFieldList from "./CustomFieldList";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
-import { AutocompleteCustom } from "./AutocompleteCustom";
+import { LocationInput } from "./LocationInput";
 import { ILocation } from "@/utils/types";
 import BlurSlider from "./BlurSlider";
 
@@ -97,7 +97,7 @@ return (
 </div>
 
 <div className="flex flex-col w-full">
-  <AutocompleteCustom 
+  <LocationInput 
     initialValue={location?.displayName}
     onPlaceSelect={(location) => {
       if (!location) return;
