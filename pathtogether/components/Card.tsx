@@ -12,8 +12,8 @@ export default function Card({ sessionNo, user, refreshUsers }: Props) {
     const { deleteUser } = useUserActions();
 
     return (
-        <div className="relative border rounded-xl p-4 shadow bg-gray-200 min-w-[250px] min-h-[150px]">
-            <h2 className="font-bold text-lg text-black">{user.name}</h2>
+        <div className="relative rounded-xl p-4 shadow bg-gray-100 dark:bg-gray-800 min-w-[250px] min-h-[150px]">
+            <h2 className="font-bold text-lg">{user.name}</h2>
             <div>
             {Object.entries(user).map(([key, value]) => {
                 if (key === "name" || key === "customResponses" || key === "_id" || typeof value === "object") return null;

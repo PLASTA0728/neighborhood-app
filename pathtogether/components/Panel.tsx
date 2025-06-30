@@ -11,15 +11,16 @@ type Props = {
     sessionNo: string;
     users: IUser[];
     refreshUsers: () => void;
+    mapStyle: string;
+    setMapStyle: (val:string) => void;
 }
 
-export default function Panel({ sessionNo, users, refreshUsers }: Props) {
+export default function Panel({ sessionNo, users, refreshUsers, mapStyle, setMapStyle }: Props) {
     const [panelView, setPanelView] = useState("map");
-    const [mapStyle, setMapStyle] = useState("default-light");
     return (
-        <div className='flex-1 bg-gray-100 relative min-h-screen overflow-hidden'>
-            <div className='absolute top-4 right-0 z-30 grid grid-cols-2 gap-4'>
-                <select className='bg-white text-black h-10 items-center rounded-lg px-4 text-sm font-medium shadow'
+        <div className='flex-1 bg-white dark:bg-gray-700 relative min-h-screen overflow-hidden'>
+            <div className='absolute top-5 right-10 z-30 grid grid-cols-2 gap-4'>
+                <select className='bg-white border border-gray-300 dark:bg-gray-600 dark:border-gray-600 px-1 py-2 rounded-md text-center text-sm font-medium shadow h-10 px-4'
                     onChange={(e) => setPanelView(e.target.value)}>
                     <option value="map">map view</option>
                     <option value="card">card view</option>
@@ -29,8 +30,8 @@ export default function Panel({ sessionNo, users, refreshUsers }: Props) {
                 </Button>
             </div>
             {panelView === "map" && (
-                <div className='absolute top-4 left-6 z-30'>
-                    <select className='bg-white text-black h-10 items-center rounded-lg px-4 text-sm font-medium shadow'
+                <div className='absolute top-5 left-6 z-30'>
+                    <select className='bg-white border border-gray-300 dark:bg-gray-600 dark:border-gray-600 px-1 py-2 rounded-md text-center text-sm font-medium shadow h-10 px-4'
                         value={mapStyle}
                         onChange={(e) => setMapStyle(e.target.value)}>
                         <option value="default-light">default (light)</option>

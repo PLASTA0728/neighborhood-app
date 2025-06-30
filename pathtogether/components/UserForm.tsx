@@ -75,7 +75,7 @@ export default function UserForm({ mapDoc, initialUser, onSubmit }: Props) {
                 <Switch
                     checked={enabled}
                     onChange={setEnabled}
-                    className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-white/10 p-1 ease-in-out focus:not-data-focus:outline-none data-checked:bg-blue-600 data-focus:outline data-focus:outline-white"
+                    className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-white/10 p-1 ease-in-out focus:not-data-focus:outline-none data-checked:!bg-blue-600 data-focus:outline data-focus:outline-white"
                 >
                 <span
                     aria-hidden="true"

@@ -6,10 +6,12 @@ import { cousine } from '@/ui/fonts'
 import type { IUser } from '@/utils/types';
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
-import { SquareLoader } from 'react-spinners'
 import { useUserFormData } from '@/hooks/useUserFormData'
 import FormFields from '@/components/UserFormFields'
 import useMediaQuery from '@/hooks/useMediaQuery'
+import { APIProvider } from '@vis.gl/react-google-maps'
+import ThemeToggle from '@/components/ThemeToggle'
+import LoadingView from '@/components/LoadingView'
 
 export default function EditUser() {
     const smBreakpoint = useMediaQuery('(min-width:520px)');
@@ -19,6 +21,7 @@ export default function EditUser() {
     const [mapDoc, setMapDoc] = useState(null);
     const [users, setUsers] = useState<IUser[]>([]);
     const [enabled, setEnabled] = useState(false);
+    const [mapStyle, setMapStyle] = useState("default-light");
     
     const {
         loading,
@@ -75,18 +78,18 @@ export default function EditUser() {
     };
 
     if (loading) return (
-        <div>
-            <div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-              <SquareLoader color="#94a3b8"/>
-              <p className='text-sm'>loading...</p>
-            </div>
-        </div>
+        <LoadingView />
     )
 
     return (
+        <APIProvider  apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+      libraries={['places']}>
     <main className="relative w-full">
+        <div className="absolute top-5 right-5 z-20">
+                <ThemeToggle mapStyle={mapStyle} setMapStyle={setMapStyle}/>
+              </div>
         <div className={`flex ${ smBreakpoint? 'flex-row h-screen' : 'flex-col min-h-screen'}`}>
-            <div className={`${ smBreakpoint? 'w-[400px] overflow-y-auto h-full' : 'w-full'} mb-6 pt-4 pl-4 pr-4 relative`}>
+            <div className={`${ smBreakpoint? 'w-[400px] overflow-y-auto h-full' : 'w-full'} mb-6 pt-4 pl-4 pr-4 relative dark:bg-gray-800`}>
                 <div className='text-2xl text-center'>
                 you are now editing <span className='text-emerald-400'>{name}</span>&apos;s info on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map
                 </div>
@@ -104,6 +107,7 @@ export default function EditUser() {
                     setContact={setContact}
                     role={role}
                     setRole={setRole}
+                    location={location}
                     setLocation={setLocation}
                     enabled={enabled}
                     setEnabled={setEnabled}
@@ -139,9 +143,9 @@ export default function EditUser() {
                 </Button>
                 </div>
             </div>
-            <Panel sessionNo={sessionNo.toString()} users={users} refreshUsers={refreshUsers}/>
-            
+            <Panel sessionNo={sessionNo.toString()} users={users} refreshUsers={refreshUsers} mapStyle={mapStyle} setMapStyle={setMapStyle}/>
         </div>
     </main>
+    </APIProvider>
     )
 }

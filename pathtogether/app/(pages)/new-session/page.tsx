@@ -124,7 +124,7 @@ export default function NewSession() {
       <div className="absolute top-5 right-5 z-20">
         <ThemeToggle />
       </div>
-      <div className={`flex ${ smBreakpoint? 'flex-row' : 'flex-col '} min-h-screen w-full bg-gray-100 dark:bg-gray-800`}>
+      <div className={`flex ${ smBreakpoint? 'flex-row' : 'flex-col '} min-h-screen w-full bg-gray-50 dark:bg-gray-800`}>
         <div className={`mb-6 ${ smBreakpoint? 'w-[400px]' : 'w-full'} pt-4 pl-4 pr-4 flex flex-col relative`}>
           
           <CreateFormFields 

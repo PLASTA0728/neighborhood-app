@@ -7,9 +7,11 @@ import { saveUser } from '@/utils/saveUser'
 import type { IUser, ILocation, ICustomResponse } from '@/utils/types'
 import { useUserActions } from '@/hooks/useUserActions'
 import Panel from '@/components/Panel'
-import { SquareLoader } from 'react-spinners'
 import FormFields from '@/components/UserFormFields'
 import useMediaQuery from '@/hooks/useMediaQuery'
+import { APIProvider } from '@vis.gl/react-google-maps'
+import ThemeToggle from '@/components/ThemeToggle'
+import LoadingView from '@/components/LoadingView'
 
 
 export default function EditSession() {
@@ -19,6 +21,7 @@ export default function EditSession() {
     
     const { sessionNo } = useParams();
     const router = useRouter();
+    const [mapStyle, setMapStyle] = useState("default-light");
     const [mapDoc, setMapDoc] = useState(null);
     const [loading, setLoading] = useState(true);
     const [enabled, setEnabled] = useState(false);
@@ -114,19 +117,19 @@ export default function EditSession() {
     }, [fetchUsers, sessionNo]);
 
     if (loading) return (
-        <div>
-            <div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-              <SquareLoader color="#94a3b8"/>
-              <p className='text-sm'>loading...</p>
-            </div>
-        </div>
+        <LoadingView />
     )
     if (!isMounted) { return null; }
 
     return (
+        <APIProvider  apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+      libraries={['places']}>
     <main className="relative w-full">
+        <div className="absolute top-5 right-5 z-20">
+                <ThemeToggle mapStyle={mapStyle} setMapStyle={setMapStyle}/>
+              </div>
         <div className={`flex ${ smBreakpoint? 'flex-row h-screen' : 'flex-col min-h-screen'}`}>
-            <div className={`${ smBreakpoint? 'w-[400px] overflow-y-auto h-full' : 'w-full'} mb-6 pt-4 pl-4 pr-4 relative`}>
+            <div className={`${ smBreakpoint? 'w-[400px] overflow-y-auto h-full' : 'w-full'} mb-6 pt-4 pl-4 pr-4 relative dark:bg-gray-800`}>
                 <div className='text-2xl text-center'>
                 take me on the <span className="text-emerald-400">{mapDoc?.mapName}</span> map for <span className='text-emerald-400'>{mapDoc?.groupName}</span>!
                 </div>
@@ -141,6 +144,7 @@ export default function EditSession() {
                     setContact={setContact}
                     role={role}
                     setRole={setRole}
+                    location={location}
                     setLocation={setLocation}
                     enabled={enabled}
                     setEnabled={setEnabled}
@@ -149,8 +153,7 @@ export default function EditSession() {
                     handleCustomChange={handleCustomChange}
                     errors={errors}
                     setErrors={setErrors}
-                />
-
+                />  
                 <div className='flex flex-col items-center mb-4'>
                 <Button
                     className="mt-4"
@@ -162,8 +165,9 @@ export default function EditSession() {
                 </Button>
                 </div>
             </div>
-            <Panel sessionNo={sessionNo.toString()} users={users} refreshUsers={refreshUsers}/>
+            <Panel sessionNo={sessionNo.toString()} users={users} refreshUsers={refreshUsers} mapStyle={mapStyle} setMapStyle={setMapStyle}/>
         </div>
     </main>
+    </APIProvider>
     )
 }
