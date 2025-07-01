@@ -31,7 +31,6 @@ export const metadata: Metadata = {
       {
         url: "/ptg_assets/logo.png", // or full URL if hosted externally
         width: 1200,
-        height: 630,
         alt: "PathTogether social preview",
       },
     ],

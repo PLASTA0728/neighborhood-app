@@ -27,7 +27,7 @@ export default function App() {
       </div> 
       <div className={`absolute ${pageBreakpoint ? "top-1/2 right-1/14" : "top-15/27 left-1/2 transform -translate-x-1/2 z-10"}`}>
       <SessionInput value={submittedSessionNo} onChange={setSubmittedSessionNo} />
-      <Link href={"/new-session"} className="relative left-4 top-2 text-gray-200">don&apos;t have one? generate now!</Link>
+      <Link href={"/new"} className="relative left-4 top-2 text-gray-200">don&apos;t have one? generate now!</Link>
       </div>
     </div>
   );

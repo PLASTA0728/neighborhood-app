@@ -4,8 +4,8 @@ export default function Walkthrough() {
     return (
         <>
             <h2 className="text-gray-800 dark:text-gray-300 text-xl">to get started</h2>
-            <p>besides the <Link href="/" className="text-blue-400">landing page</Link>, there are two main pages: <Link href="/new-session">create new session</Link> & edit session (which you <span className="inline font-bold text-red-500">can&apos;t</span> get access to before having a session code).</p>
-            <p>you are currently on the <Link href="/new-session" className="text-blue-400">create session page</Link>. after you create a session, you can click on the &ldquo;share my session&rdquo; button below to get your session code on a pop-up. Your session code should be in the format of alphanumerical digits of length 8.</p>
+            <p>besides the <Link href="/" className="text-blue-400">landing page</Link>, there are two main pages: <Link href="/new">create new session</Link> & edit session (which you <span className="inline font-bold text-red-500">can&apos;t</span> get access to before having a session code).</p>
+            <p>you are currently on the <Link href="/new" className="text-blue-400">create session page</Link>. after you create a session, you can click on the &ldquo;share my session&rdquo; button below to get your session code on a pop-up. Your session code should be in the format of alphanumerical digits of length 8.</p>
             <p>after you get your session code, you can copy paste the session code to your friends. after they enter the session code in the input box on the landing page and press enter, they will be redirected to the edit page of your customized session to enter their information.</p>
             <h2 className="text-gray-800 dark:text-gray-300 text-xl">how to design a customized session?</h2>
             <p>after people enter the session code and get access to the session, they will see default basic entries including `name`, `age`, `contact`, `role`, and `location`; if you enter any customized fields on this create new session page, they will also be able to see the entries under the default entries.</p>
