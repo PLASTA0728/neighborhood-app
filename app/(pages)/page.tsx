@@ -26,8 +26,10 @@ export default function App() {
         <div className="text-3xl font-extralight">one map, every destination</div>
       </div> 
       <div className={`absolute ${pageBreakpoint ? "top-1/2 right-1/14" : "top-15/27 left-1/2 transform -translate-x-1/2 z-10"}`}>
+      <Link href={"/new"} className="relative left-2 bottom-2 text-gray-200 hover:underline">GENERATE YOUR MAP SESSION NOW!</Link>
+      
+      <div className="relative left-2 text-gray-200">or... if you already have a session code:</div>
       <SessionInput value={submittedSessionNo} onChange={setSubmittedSessionNo} />
-      <Link href={"/new"} className="relative left-4 top-2 text-gray-200">don&apos;t have one? generate now!</Link>
       </div>
     </div>
   );

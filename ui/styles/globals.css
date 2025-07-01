@@ -45,7 +45,7 @@ input {
 }
 
 input.monochrome {
-  @apply bg-black placeholder:text-gray-500 px-4 py-4 w-75 relative left-0 rounded-md border border-black
+  @apply border-0 border-b-1 border-gray-400 bg-transparent focus:outline-none focus:bg-white/10 duration-200 text-white placeholder-gray-500 rounded-none 
 }
 
 button {
