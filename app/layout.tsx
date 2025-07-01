@@ -25,11 +25,11 @@ export const metadata: Metadata = {
     title: "PathTogether",
     description:
       "One map, every destination — PathTogether lets you generate map sessions, share them with friends, and pin everyone on the map for easy meetups.",
-    url: "https://pathtogether.vercel.app", // <-- update to your real domain
+    url: "https://pathtogether.vercel.app", 
     type: "website",
     images: [
       {
-        url: "@/public/ptg_assets/logo.png", // or full URL if hosted externally
+        url: "/ptg_assets/logo.png", // or full URL if hosted externally
         width: 1200,
         height: 630,
         alt: "PathTogether social preview",
